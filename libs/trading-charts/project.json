@@ -1,0 +1,13 @@
+{
+  "name": "trading-charts",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/trading-charts/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:trading-charts"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
+

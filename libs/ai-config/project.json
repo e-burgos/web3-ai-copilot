@@ -1,0 +1,13 @@
+{
+  "name": "ai-config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ai-config/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:ai-config"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
+

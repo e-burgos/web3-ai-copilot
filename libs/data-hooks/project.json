@@ -1,0 +1,13 @@
+{
+  "name": "data-hooks",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/data-hooks/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:data-hooks"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
+

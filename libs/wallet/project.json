@@ -1,0 +1,13 @@
+{
+  "name": "wallet",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/wallet/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:wallet"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
+

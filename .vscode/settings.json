@@ -1,0 +1,27 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.workingDirectories": [
+    "apps/web",
+    "apps/ai-gateway",
+    "libs/wallet",
+    "libs/ui-components",
+    "libs/data-hooks",
+    "libs/app-state",
+    "libs/trading-charts",
+    "libs/shared-utils",
+    "libs/export-services",
+    "libs/ai-config",
+    "libs/rag-services"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
+

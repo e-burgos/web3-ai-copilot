@@ -1,0 +1,13 @@
+{
+  "name": "rag-services",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/rag-services/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:rag-services"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
+

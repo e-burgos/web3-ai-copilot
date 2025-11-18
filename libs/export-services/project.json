@@ -1,0 +1,13 @@
+{
+  "name": "export-services",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/export-services/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:export-services"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
+
