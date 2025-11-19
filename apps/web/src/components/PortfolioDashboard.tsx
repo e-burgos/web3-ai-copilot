@@ -3,9 +3,12 @@ import { Card, Skeleton } from '@web3-ai-copilot/ui-components';
 import { formatCurrency } from '@web3-ai-copilot/shared-utils';
 import { TokenList } from './TokenList';
 import { NativeBalance } from './NativeBalance';
+import { Transactions } from './Transactions';
 
 export function PortfolioDashboard() {
   const { data, isLoading, error } = usePortfolio();
+
+  console.log(data);
 
   if (isLoading) {
     return (
@@ -55,7 +58,8 @@ export function PortfolioDashboard() {
         <h3 className="text-xl font-semibold mb-4">Tokens</h3>
         <TokenList />
       </Card>
+
+      {/* <Transactions /> */}
     </div>
   );
 }
-

@@ -50,9 +50,16 @@ class LLMService {
       throw new Error(`OpenAI API error: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+      usage?: {
+        promptTokens: number;
+        completionTokens: number;
+        totalTokens: number;
+      };
+    };
     return {
-      content: data.choices[0]?.message?.content || '',
+      content: data.choices?.[0]?.message?.content || '',
       usage: data.usage,
     };
   }
@@ -89,9 +96,16 @@ class LLMService {
       throw new Error(`Anthropic API error: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      content?: Array<{ text?: string }>;
+      usage?: {
+        promptTokens: number;
+        completionTokens: number;
+        totalTokens: number;
+      };
+    };
     return {
-      content: data.content[0]?.text || '',
+      content: data.content?.[0]?.text || '',
       usage: data.usage,
     };
   }
@@ -121,7 +135,9 @@ class LLMService {
       throw new Error(`Llama API error: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      message?: { content?: string };
+    };
     return {
       content: data.message?.content || '',
     };
@@ -129,4 +145,3 @@ class LLMService {
 }
 
 export const llmService = new LLMService();
-

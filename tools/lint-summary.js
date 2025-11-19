@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * Script para mostrar un resumen de errores de lint
- * Uso: node tools/lint-summary.js
+ * Script to show a summary of lint errors by project
+ * Usage: node tools/lint-summary.js
  */
 
 const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
 
-// Proyectos a verificar (apps y libs)
+// Projects to check (apps and libs)
 const projects = [
   'web',
   'ai-gateway',
@@ -30,8 +28,8 @@ function runLintForProject(projectName) {
       encoding: 'utf-8',
       stdio: 'pipe',
     });
-    
-    // Verificar si el proyecto está siendo ignorado
+
+    // Check if the project is being ignored
     if (output.includes('All files matching the following patterns are ignored')) {
       return {
         success: true,
@@ -39,12 +37,12 @@ function runLintForProject(projectName) {
         ignored: true,
       };
     }
-    
+
     return { success: true, project: projectName };
   } catch (error) {
     const errorOutput = error.stdout || error.stderr || error.message;
-    
-    // Verificar si es solo un warning de archivos ignorados
+
+    // Check if it's only a warning about ignored files
     if (errorOutput.includes('All files matching the following patterns are ignored')) {
       return {
         success: true,
@@ -52,12 +50,12 @@ function runLintForProject(projectName) {
         ignored: true,
       };
     }
-    
-    // Extraer solo las líneas relevantes del error
+
+    // Extract only the relevant lines from the error
     const errorLines = errorOutput
       .split('\n')
       .filter((line) => {
-        // Filtrar líneas de progreso de Nx
+        // Filter out Nx progress lines
         return (
           !line.includes('NX') &&
           !line.includes('Running target') &&
@@ -65,8 +63,8 @@ function runLintForProject(projectName) {
           line.trim().length > 0
         );
       })
-      .slice(0, 10); // Primeras 10 líneas relevantes
-    
+      .slice(0, 10); // First 10 relevant lines
+
     return {
       success: false,
       project: projectName,
@@ -76,8 +74,8 @@ function runLintForProject(projectName) {
 }
 
 function runLintSummary() {
-  console.log('🔍 Analizando errores de lint...\n');
-  console.log(`Verificando ${projects.length} proyecto(s)...\n`);
+  console.log('🔍 Analyzing lint errors...\n');
+  console.log(`Checking ${projects.length} projects...\n`);
 
   const results = projects.map((project) => runLintForProject(project));
 
@@ -86,28 +84,28 @@ function runLintSummary() {
   const projectsIgnored = results.filter((r) => r.ignored);
 
   if (projectsWithErrors.length === 0) {
-    console.log('✅ No se encontraron errores de lint!\n');
-    
+    console.log('✅ No lint errors found!\n');
+
     if (projectsSuccessful.length > 0) {
-      console.log(`✅ ${projectsSuccessful.length} proyecto(s) sin errores:\n`);
+      console.log(`✅ ${projectsSuccessful.length} projects with no errors:\n`);
       projectsSuccessful.forEach(({ project }) => {
         console.log(`   ✓ ${project}`);
       });
       console.log('');
     }
-    
+
     if (projectsIgnored.length > 0) {
-      console.log(`ℹ️  ${projectsIgnored.length} proyecto(s) ignorados (sin archivos para lint):\n`);
+      console.log(`ℹ️  ${projectsIgnored.length} projects ignored (no files for lint):\n`);
       projectsIgnored.forEach(({ project }) => {
         console.log(`   ⊘ ${project}`);
       });
       console.log('');
     }
-    
+
     return;
   }
 
-  console.log(`❌ Se encontraron errores en ${projectsWithErrors.length} proyecto(s):\n`);
+  console.log(`❌ Found errors in ${projectsWithErrors.length} projects:\n`);
 
   projectsWithErrors.forEach(({ project, error }) => {
     console.log(`📁 ${project}`);
@@ -115,25 +113,24 @@ function runLintSummary() {
   });
 
   if (projectsSuccessful.length > 0) {
-    console.log(`\n✅ ${projectsSuccessful.length} proyecto(s) sin errores:\n`);
+    console.log(`\n✅ ${projectsSuccessful.length} projects with no errors:\n`);
     projectsSuccessful.forEach(({ project }) => {
       console.log(`   ✓ ${project}`);
     });
   }
-  
+
   if (projectsIgnored.length > 0) {
-    console.log(`\nℹ️  ${projectsIgnored.length} proyecto(s) ignorados (sin archivos para lint):\n`);
+    console.log(`\nℹ️  ${projectsIgnored.length} projects ignored (no files for lint):\n`);
     projectsIgnored.forEach(({ project }) => {
       console.log(`   ⊘ ${project}`);
     });
   }
 
-  console.log('\n💡 Tip: Ejecuta "pnpm lint:debug" para ver detalles completos');
-  console.log('💡 Tip: Ejecuta "pnpm lint:fix" para intentar corregir automáticamente');
-  console.log(`💡 Tip: Ejecuta "nx lint <proyecto>" para ver detalles de un proyecto específico\n`);
+  console.log('\n💡 Tip: Run "pnpm lint:debug" to see detailed output');
+  console.log('💡 Tip: Run "pnpm lint:fix" to automatically fix errors');
+  console.log(`💡 Tip: Run "nx lint <project>" to see details of a specific project\n`);
 
   process.exit(1);
 }
 
 runLintSummary();
-

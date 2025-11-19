@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useUIStore } from '@web3-ai-copilot/app-state';
+import { useCombinedPortfolioData } from '@web3-ai-copilot/data-hooks';
 import { Button } from '@web3-ai-copilot/ui-components';
 import { ChatMessage } from './ChatMessage';
 
@@ -10,6 +11,7 @@ interface Message {
 
 export function AICopilotSidebar() {
   const { chatOpen, setChatOpen } = useUIStore();
+  const { data: portfolioData } = useCombinedPortfolioData();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +38,7 @@ export function AICopilotSidebar() {
             role: m.role,
             content: m.content,
           })),
+          portfolioData,
         }),
       });
 

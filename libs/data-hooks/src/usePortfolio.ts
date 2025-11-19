@@ -1,31 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
-import { ZerionPosition, ZerionApiResponse } from './types/zerionTypes';
-
-interface PortfolioPosition {
-  id: string;
-  type: string;
-  chainId: number;
-  value: number;
-  price: number;
-  symbol: string;
-  quantity: string;
-  attributes: {
-    fungible_info?: {
-      name: string;
-      symbol: string;
-      icon?: {
-        url: string;
-      };
-      implementations?: {
-        decimals: number;
-      };
-    };
-  };
-}
-
+import { createZerionHeaders, ZerionPortfolioResponse } from './types/zerionTypes';
 interface PortfolioData {
-  positions: PortfolioPosition[];
+  portfolio: ZerionPortfolioResponse['data'];
   totalValue: number;
 }
 
@@ -40,33 +17,23 @@ export function usePortfolio() {
       }
 
       const apiKey = import.meta.env.VITE_ZERION_API_KEY;
-      if (!apiKey) {
-        throw new Error('Zerion API key not configured');
-      }
+      const headers = createZerionHeaders(apiKey);
 
       const response = await fetch(
-        `https://api.zerion.io/v1/wallets/${address}/positions/?currency=usd`,
-        {
-          headers: {
-            accept: 'application/json',
-            authorization: `Bearer ${apiKey}`,
-          },
-        }
+        `https://api.zerion.io/v1/wallets/${address}/portfolio?filter[positions]=only_simple&currency=usd`,
+        { headers }
       );
 
       if (!response.ok) {
         throw new Error(`Failed to fetch portfolio: ${response.statusText}`);
       }
 
-      const data = (await response.json()) as ZerionApiResponse;
-      const positions = data.data || [];
-      const totalValue = positions.reduce(
-        (sum: number, pos: ZerionPosition) => sum + (pos.value || 0),
-        0
-      );
+      const data = (await response.json()) as ZerionPortfolioResponse;
+      const portfolio = data.data;
+      const totalValue = data.data.attributes.total.positions;
 
       return {
-        positions: positions as unknown as PortfolioPosition[],
+        portfolio: portfolio as ZerionPortfolioResponse['data'],
         totalValue,
       };
     },
@@ -75,4 +42,3 @@ export function usePortfolio() {
     refetchInterval: 60 * 1000, // 1 minute
   });
 }
-

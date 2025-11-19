@@ -1,9 +1,17 @@
-import { useMultiChainBalance } from '@web3-ai-copilot/wallet';
 import { Card, Skeleton } from '@web3-ai-copilot/ui-components';
 import { formatNumber } from '@web3-ai-copilot/shared-utils';
+import { usePortfolio } from '@web3-ai-copilot/data-hooks';
 
 export function NativeBalance() {
-  const { data: balances, isLoading } = useMultiChainBalance();
+  const { data: portfolio, isLoading } = usePortfolio();
+
+  const positionsByChainToArray = Object.entries(
+    portfolio?.portfolio.attributes.positions_distribution_by_chain || {}
+  );
+
+  const positionsByTypeToArray = Object.entries(
+    portfolio?.portfolio.attributes.positions_distribution_by_type || {}
+  );
 
   if (isLoading) {
     return (
@@ -13,24 +21,43 @@ export function NativeBalance() {
     );
   }
 
-  if (!balances || balances.length === 0) {
+  if (!portfolio) {
     return null;
   }
 
   return (
-    <Card>
-      <h3 className="text-xl font-semibold mb-4">Native Balances</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        {balances.map((balance) => (
-          <div key={balance.chainId} className="space-y-1">
-            <div className="text-sm text-muted-foreground">{balance.chainName}</div>
-            <div className="text-lg font-semibold">
-              {formatNumber(parseFloat(balance.formatted), 4)} {balance.symbol}
+    <div className="space-y-6">
+      <Card className="p-4 rounded-xl shadow-lg">
+        <h3 className="text-xl font-semibold mb-4">Distribution by Chain</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {positionsByChainToArray.map(([chainId, balance]) => (
+            <div key={chainId} className="space-y-1">
+              <div className="text-sm text-muted-foreground">
+                {chainId.toLowerCase().replace('-', ' ').replace('_', ' ').toUpperCase()}
+              </div>
+              <div className="text-lg font-semibold">
+                {`$ ${formatNumber(parseFloat(balance.toString()), 4)}`}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </Card>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="p-4 rounded-xl shadow-lg">
+        <h3 className="text-xl font-semibold mb-4">Distribution by Type</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {positionsByTypeToArray.map(([type, balance]) => (
+            <div key={type} className="space-y-1">
+              <div className="text-sm text-muted-foreground">
+                {type.toLowerCase().replace('-', ' ').replace('_', ' ').toUpperCase()}
+              </div>
+              <div className="text-lg font-semibold">
+                {`$ ${formatNumber(parseFloat(balance.toString()), 4)}`}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
   );
 }
-

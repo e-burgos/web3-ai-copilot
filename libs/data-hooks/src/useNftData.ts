@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
-import { ZerionPosition, ZerionApiResponse } from './types/zerionTypes';
+import { ZerionPosition, ZerionApiResponse, createZerionHeaders } from './types/zerionTypes';
 
 interface NftData {
   id: string;
@@ -24,18 +24,11 @@ export function useNftData(address?: string) {
       }
 
       const apiKey = import.meta.env.VITE_ZERION_API_KEY;
-      if (!apiKey) {
-        throw new Error('Zerion API key not configured');
-      }
+      const headers = createZerionHeaders(apiKey);
 
       const response = await fetch(
         `https://api.zerion.io/v1/wallets/${targetAddress}/positions/?currency=usd&filter[positions_types]=non_fungible`,
-        {
-          headers: {
-            accept: 'application/json',
-            authorization: `Bearer ${apiKey}`,
-          },
-        }
+        { headers }
       );
 
       if (!response.ok) {
@@ -61,4 +54,3 @@ export function useNftData(address?: string) {
     staleTime: 60 * 1000, // 1 minute
   });
 }
-

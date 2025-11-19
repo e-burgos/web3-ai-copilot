@@ -36,7 +36,7 @@ export async function exportToPdf(
 
   // Table headers
   doc.setFontSize(12);
-  doc.setFont(undefined, 'bold');
+  doc.setFont('helvetica', 'bold');
   const headers = ['Symbol', 'Name', 'Balance', 'Price', 'Value'];
   const colWidths = [25, 60, 30, 30, 30];
   let xPosition = margin;
@@ -47,7 +47,7 @@ export async function exportToPdf(
   });
 
   yPosition += 8;
-  doc.setFont(undefined, 'normal');
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
 
   // Table rows
@@ -76,7 +76,7 @@ export async function exportToPdf(
 
   // Total
   yPosition += 5;
-  doc.setFont(undefined, 'bold');
+  doc.setFont('helvetica', 'bold');
   doc.text(`Total Value: $${data.totalValue.toFixed(2)}`, margin, yPosition);
 
   doc.save(`${filename}.pdf`);

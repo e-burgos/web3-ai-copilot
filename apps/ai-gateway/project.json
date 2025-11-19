@@ -6,13 +6,17 @@
   "tags": ["type:app", "scope:backend"],
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/ai-gateway",
         "main": "apps/ai-gateway/src/index.ts",
         "tsConfig": "apps/ai-gateway/tsconfig.app.json",
-        "assets": ["apps/ai-gateway/src/assets"]
+        "assets": ["apps/ai-gateway/src/assets"],
+        "platform": "node",
+        "bundle": true,
+        "format": ["cjs"],
+        "outputFileName": "index.js"
       }
     },
     "serve": {
