@@ -10,12 +10,15 @@
     "lint:debug": "nx run-many --target=lint --all --verbose",
     "lint:errors": "nx run-many --target=lint --all --output-style=stream",
     "lint:summary": "node tools/lint-summary.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "dev": "nx serve web",
     "dev:gateway": "nx serve ai-gateway"
   },
   "packageManager": "pnpm@9.0.0",
   "private": true,
   "dependencies": {
+    "@e-burgos/tucu-ui": "^1.1.0",
     "@tanstack/react-query": "^5.17.0",
     "@wagmi/core": "^2.5.0",
     "clsx": "^2.1.0",

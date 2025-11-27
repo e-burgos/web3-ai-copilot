@@ -5,8 +5,8 @@ export function ThemeToggle() {
 
   return (
     <InputSwitch
-      offLabel={(<LucideIcons.Sun />) as unknown as string}
-      onLabel={(<LucideIcons.Moon />) as unknown as string}
+      offLabel={(<LucideIcons.Sun className="w-4 h-4" />) as unknown as string}
+      onLabel={(<LucideIcons.Moon className="w-4 h-4" />) as unknown as string}
       checked={mode === 'dark'}
       onChange={() => setMode(mode === 'dark' ? 'light' : 'dark')}
     />

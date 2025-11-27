@@ -1,65 +1,61 @@
 import { usePortfolio } from '@web3-ai-copilot/data-hooks';
-import { Card, Skeleton } from '@web3-ai-copilot/ui-components';
+import { Skeleton } from '@web3-ai-copilot/ui-components';
 import { formatCurrency } from '@web3-ai-copilot/shared-utils';
-import { TokenList } from './TokenList';
 import { NativeBalance } from './NativeBalance';
-import { Transactions } from './Transactions';
+import { CardContainer, LucideIcons, Typography } from '@e-burgos/tucu-ui';
 
 export function PortfolioDashboard() {
   const { data, isLoading, error } = usePortfolio();
 
-  console.log(data);
-
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Card>
-          <Skeleton variant="rectangular" className="h-24" />
-        </Card>
-        <Card>
-          <Skeleton variant="rectangular" className="h-64" />
-        </Card>
+        <Skeleton variant="rectangular" className="h-24 rounded-lg" />
+        <Skeleton variant="rectangular" className="h-64 rounded-lg" />
+        <Skeleton variant="rectangular" className="h-64 rounded-lg" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <Card>
-        <div className="text-center py-8">
-          <p className="text-destructive">Error loading portfolio: {error.message}</p>
+      <CardContainer>
+        <div className="flex w-full flex-col items-center justify-center text-center gap-2 py-4">
+          <LucideIcons.DatabaseBackup className="w-16 h-16 text-muted-foreground mb-2" />
+          <Typography tag="h4" className="text-destructive">
+            Error loading portfolio: {error.message}
+          </Typography>
         </div>
-      </Card>
+      </CardContainer>
     );
   }
 
   if (!data) {
     return (
-      <Card>
-        <div className="text-center py-8">
-          <p className="text-muted-foreground">No portfolio data available</p>
+      <CardContainer>
+        <div className="flex w-full flex-col items-center justify-center text-center gap-2 py-4">
+          <LucideIcons.DatabaseBackup className="w-16 h-16 text-muted-foreground mb-2" />
+          <Typography tag="h4" className="text-muted-foreground">
+            No portfolio data available
+          </Typography>
         </div>
-      </Card>
+      </CardContainer>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Portfolio Overview</h2>
-          <div className="text-4xl font-bold">{formatCurrency(data.totalValue)}</div>
+    <div className="space-y-6 w-full">
+      <CardContainer>
+        <div className="space-y-2">
+          <Typography tag="h3" className="font-semibold">
+            Portfolio Overview
+          </Typography>
+          <Typography tag="h1" className="font-bold text-brand">
+            {formatCurrency(data.totalValue)}
+          </Typography>
         </div>
-      </Card>
-
+      </CardContainer>
       <NativeBalance />
-
-      <Card>
-        <h3 className="text-xl font-semibold mb-4">Tokens</h3>
-        <TokenList />
-      </Card>
-
-      {/* <Transactions /> */}
     </div>
   );
 }

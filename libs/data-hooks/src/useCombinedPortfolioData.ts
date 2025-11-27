@@ -64,16 +64,21 @@ export function useCombinedPortfolioData() {
   const { data: tokenData, isLoading: tokenLoading } = useTokenData();
   const { data: nftData, isLoading: nftLoading } = useNftData();
   const { data: defiData, isLoading: defiLoading } = useDefiPositions();
-  const { data: transactionData, isLoading: transactionLoading } = useTransactionData();
+  const { data: transactionData, isLoading: transactionLoading } =
+    useTransactionData();
 
-  console.log('portfolioData', portfolioData);
-  console.log('tokenData', tokenData);
-  console.log('nftData', nftData);
-  console.log('defiData', defiData);
-  console.log('transactionData', transactionData);
+  // console.log('portfolioData', portfolioData);
+  // console.log('tokenData', tokenData);
+  // console.log('nftData', nftData);
+  // console.log('defiData', defiData);
+  // console.log('transactionData', transactionData);
 
   const isLoading =
-    portfolioLoading || tokenLoading || nftLoading || defiLoading || transactionLoading;
+    portfolioLoading ||
+    tokenLoading ||
+    nftLoading ||
+    defiLoading ||
+    transactionLoading;
 
   const combinedData: CombinedPortfolioData | null =
     address && !isLoading

@@ -1,36 +1,46 @@
 import { useNftData } from '@web3-ai-copilot/data-hooks';
-import { Card, Skeleton } from '@web3-ai-copilot/ui-components';
+import { Skeleton } from '@web3-ai-copilot/ui-components';
+import { CardContainer, LucideIcons, Typography } from '@e-burgos/tucu-ui';
 
 export function NftViewer() {
   const { data: nfts, isLoading } = useNftData();
 
   if (isLoading) {
     return (
-      <Card>
+      <div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
             <Skeleton key={i} variant="rectangular" className="h-64" />
           ))}
         </div>
-      </Card>
+      </div>
     );
   }
 
-  if (!nfts || nfts.length === 0) {
+  if (!nfts || nfts?.length === 0) {
     return (
-      <Card>
-        <h3 className="text-xl font-semibold mb-4">NFTs</h3>
-        <p className="text-muted-foreground text-center py-8">No NFTs found</p>
-      </Card>
+      <CardContainer>
+        <div className="flex w-full flex-col items-center justify-center text-center gap-2 py-4">
+          <LucideIcons.PictureInPicture2Icon className="w-16 h-16 text-muted-foreground mb-2" />
+          <Typography tag="h4" className="text-muted-foreground">
+            No NFTs found
+          </Typography>
+        </div>
+      </CardContainer>
     );
   }
 
   return (
-    <Card>
-      <h3 className="text-xl font-semibold mb-4">NFTs</h3>
+    <CardContainer>
+      <Typography tag="h3" className="text-xl font-semibold mb-4">
+        NFTs
+      </Typography>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {nfts.map((nft) => (
-          <div key={nft.id} className="border border-border rounded-lg overflow-hidden">
+          <div
+            key={nft.id}
+            className="border border-border rounded-lg overflow-hidden"
+          >
             {nft.image && (
               <img
                 src={nft.image}
@@ -49,7 +59,6 @@ export function NftViewer() {
           </div>
         ))}
       </div>
-    </Card>
+    </CardContainer>
   );
 }
-
