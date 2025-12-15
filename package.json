@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "test": "nx run-many --target=test --all",
-    "build": "nx run-many --target=build --all",
+    "build": "nx run-many --target=build --all --skip-nx-cache",
+    "build:web": "nx build web --force --skip-nx-cache",
+    "build:gateway": "nx build ai-gateway --force --skip-nx-cache",
     "lint": "nx run-many --target=lint --all",
     "lint:fix": "nx run-many --target=lint --all --fix",
     "lint:debug": "nx run-many --target=lint --all --verbose",
