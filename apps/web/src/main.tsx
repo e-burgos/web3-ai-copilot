@@ -1,27 +1,22 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  ReactQueryProvider,
+  defaultQueryClient,
+} from '@web3-ai-copilot/data-hooks';
 import App from './App';
 
+// Styles
 import './assets/styles/index.css';
+import '@e-burgos/tucutable/styles';
 import '@e-burgos/tucu-ui/styles';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
-  },
-});
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <ReactQueryProvider queryClient={defaultQueryClient}>
       <App />
-    </QueryClientProvider>
+    </ReactQueryProvider>
   </StrictMode>
 );

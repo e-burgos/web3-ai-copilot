@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { useUIStore } from '@web3-ai-copilot/app-state';
-import { useCombinedPortfolioData } from '@web3-ai-copilot/data-hooks';
+import { useContextPortfolioData } from '@web3-ai-copilot/data-hooks';
+import { useWallet } from '@web3-ai-copilot/wallet';
 import { ChatMessage } from './ChatMessage';
 import { IChatMessage } from '../../types';
 import { useSendAiMessageMutation } from '../../queries/useAiGateway';
+import { userChatStore } from '../../store/userChatStore';
 import {
   Drawer,
   Typography,
@@ -16,11 +17,29 @@ import {
 export function AICopilotSidebar() {
   const { mutateAsync: sendAiMessage, isPending: isLoading } =
     useSendAiMessageMutation();
-  const { chatOpen, setChatOpen } = useUIStore();
-  const { data: portfolioData } = useCombinedPortfolioData();
-  const [messages, setMessages] = useState<IChatMessage[]>([]);
+  const {
+    chatOpen,
+    setChatOpen,
+    getMessages,
+    addMessage,
+    clearHistory,
+    setCurrentWalletAddress,
+    currentWalletAddress,
+  } = userChatStore();
+  const { address } = useWallet();
+  const { data: portfolioData } = useContextPortfolioData();
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Get messages from store for current wallet
+  const messages = getMessages(address);
+
+  // Update current wallet address when it changes
+  useEffect(() => {
+    if (address !== currentWalletAddress) {
+      setCurrentWalletAddress(address ?? null);
+    }
+  }, [address, currentWalletAddress, setCurrentWalletAddress]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -36,21 +55,27 @@ export function AICopilotSidebar() {
     }
 
     const userMessage: IChatMessage = { role: 'user', content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    addMessage(userMessage, address);
     setInput('');
     try {
       const assistantMessage = await sendAiMessage({
         messages: [...messages, userMessage],
-        portfolioData,
+        portfolioData: portfolioData || null,
       });
-      setMessages((prev) => [...prev, assistantMessage]);
+      addMessage(assistantMessage, address);
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: IChatMessage = {
         role: 'assistant',
         content: 'Sorry, I encountered an error. Please try again.',
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      addMessage(errorMessage, address);
+    }
+  };
+
+  const handleClearHistory = () => {
+    if (confirm('Are you sure you want to clear the chat history?')) {
+      clearHistory(address);
     }
   };
 
@@ -61,8 +86,25 @@ export function AICopilotSidebar() {
       setIsOpen={setChatOpen}
       type={'sidebar'}
       position="right"
-      className="relative w-full md:!w-[450px]"
+      className="relative w-full md:w-[450px]!"
     >
+      {messages.length > 0 && (
+        <div className="fixed top-[32px] right-[60px] z-10">
+          <Button
+            tooltip="Clear chat history"
+            variant="ghost"
+            shape="pill"
+            size="mini"
+            onClick={handleClearHistory}
+            className="text-xs"
+          >
+            <div className="flex items-center gap-2">
+              <LucideIcons.Trash2 className="w-4 h-4" />
+              <span className="text-xs">Clear history</span>
+            </div>
+          </Button>
+        </div>
+      )}
       <div className="flex-1  space-y-4 mb-12">
         {messages.length === 0 && (
           <div className="text-center text-muted-foreground py-8">

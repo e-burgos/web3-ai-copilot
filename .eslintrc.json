@@ -1,6 +1,11 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*.spec.ts", "**/*.test.ts", "**/dist/**", "**/node_modules/**"],
+  "ignorePatterns": [
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/dist/**",
+    "**/node_modules/**"
+  ],
   "plugins": ["@nx"],
   "overrides": [
     {
@@ -30,10 +35,16 @@
       }
     },
     {
+      "files": ["*.tsx", "*.jsx"],
+      "plugins": ["react-hooks"],
+      "rules": {
+        "react-hooks/exhaustive-deps": "warn"
+      }
+    },
+    {
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nx/javascript"],
       "rules": {}
     }
   ]
 }
-

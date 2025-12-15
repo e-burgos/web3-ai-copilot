@@ -1,67 +1,21 @@
 import { llmService } from '../services/llmService';
 import { getPortfolioAnalysisPrompt } from '@web3-ai-copilot/ai-config';
 import { AIProvider } from '@web3-ai-copilot/ai-config';
+import type { ContextPortfolioData } from '@web3-ai-copilot/data-hooks/types-only';
 
 interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
 }
 
-interface PortfolioData {
-  address: string;
-  totalValue: number;
-  tokens: Array<{
-    symbol: string;
-    name: string;
-    balance: string;
-    value: number;
-    price: number;
-    priceChange24h: number;
-    logo?: string;
-  }>;
-  nfts: Array<{
-    id: string;
-    name?: string;
-    description?: string;
-    collection?: {
-      name?: string;
-    };
-    value?: number;
-    floorPrice?: number;
-  }>;
-  defiPositions: Array<{
-    id: string;
-    type: string;
-    name?: string;
-    protocol?: string;
-    value?: number;
-    apy?: number;
-  }>;
-  recentTransactions: Array<{
-    id: string;
-    operation_type: string;
-    hash: string;
-    mined_at: string;
-    transfers: Array<{
-      direction: string;
-      fungible_info?: {
-        name?: string;
-        symbol?: string;
-      };
-      quantity: {
-        numeric: string;
-      };
-      value?: number;
-    }>;
-    fee?: {
-      value?: number;
-    };
-  }>;
-}
-
 export const aiController = {
-  async chat(messages: ChatMessage[], provider?: AIProvider, portfolioData?: PortfolioData) {
-    const defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
+  async chat(
+    messages: ChatMessage[],
+    provider?: AIProvider,
+    portfolioData?: ContextPortfolioData
+  ) {
+    const defaultProvider =
+      (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
     const selectedProvider = provider || defaultProvider;
 
     let systemPrompt = 'You are a helpful Web3 AI assistant.';
@@ -71,7 +25,7 @@ export const aiController = {
 
 Portfolio Overview:
 - Wallet Address: ${portfolioData.address}
-- Total Portfolio Value: $${portfolioData.totalValue.toLocaleString()}
+- Total Portfolio Value: $${portfolioData.portfolio?.total?.positions || 0}
 
 Tokens (${portfolioData.tokens?.length}):
 ${portfolioData.tokens
@@ -83,20 +37,20 @@ ${portfolioData.tokens
   .join('\n')}
 
 ${
-  portfolioData.nfts?.length > 0
+  portfolioData.nfts && portfolioData.nfts.length > 0
     ? `NFTs (${portfolioData.nfts?.length}):
 ${portfolioData.nfts
   ?.slice(0, 5)
   .map(
     (nft) =>
-      `- ${nft.name || 'Unnamed NFT'} ${nft.collection?.name ? `(${nft.collection.name})` : ''} ${nft.value ? `- $${nft.value.toLocaleString()}` : ''}`
+      `- ${nft.name || 'Unnamed NFT'} ${nft.collection || 'Unknown Collection'} ${nft.value ? `- $${nft.value.toLocaleString()}` : ''}`
   )
   .join('\n')}`
     : ''
 }
 
 ${
-  portfolioData.defiPositions?.length > 0
+  portfolioData.defiPositions && portfolioData.defiPositions?.length > 0
     ? `DeFi Positions (${portfolioData.defiPositions?.length}):
 ${portfolioData.defiPositions
   ?.slice(0, 5)
@@ -109,7 +63,8 @@ ${portfolioData.defiPositions
 }
 
 ${
-  portfolioData.recentTransactions?.length > 0
+  portfolioData.recentTransactions &&
+  portfolioData.recentTransactions.length > 0
     ? `Recent Transactions (${portfolioData.recentTransactions?.length}):
 ${portfolioData.recentTransactions
   ?.slice(0, 5)
@@ -136,15 +91,20 @@ Use this portfolio context to provide relevant, personalized responses about the
     return response;
   },
 
-  async analyzePortfolio(portfolioData: PortfolioData, provider?: AIProvider) {
-    const defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
+  async analyzePortfolio(
+    portfolioData: ContextPortfolioData,
+    provider?: AIProvider
+  ) {
+    const defaultProvider =
+      (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
     const selectedProvider = provider || defaultProvider;
 
     const prompt = getPortfolioAnalysisPrompt(portfolioData);
     const messages: ChatMessage[] = [
       {
         role: 'system',
-        content: 'You are a crypto portfolio analyst. Provide insightful, actionable analysis.',
+        content:
+          'You are a crypto portfolio analyst. Provide insightful, actionable analysis.',
       },
       {
         role: 'user',

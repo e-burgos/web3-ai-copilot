@@ -1,8 +1,8 @@
-import { useUIStore } from '@web3-ai-copilot/app-state';
-import { Button, LucideIcons } from '@e-burgos/tucu-ui';
+import { LucideIcons } from '@e-burgos/tucu-ui';
+import { userChatStore } from '../../store/userChatStore';
 
 export function AICopilotChatButton() {
-  const { setChatOpen } = useUIStore();
+  const { setChatOpen } = userChatStore();
 
   return (
     <button

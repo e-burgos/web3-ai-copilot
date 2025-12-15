@@ -1,10 +1,10 @@
 import { PageLayout } from '../components/layout/PageLayout';
-import { TokenList } from '../components/TokenList';
+import { TokenTable } from '../components/tokens/TokenTable';
 
 function TokensPage() {
   return (
     <PageLayout title="Tokens">
-      <TokenList />
+      <TokenTable />
     </PageLayout>
   );
 }

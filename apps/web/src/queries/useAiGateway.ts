@@ -3,12 +3,12 @@ import { IChatMessage } from '../types';
 import { AI_GATEWAY_URL } from '../utils/constants';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import axios from 'axios';
-import { CombinedPortfolioData } from '@web3-ai-copilot/data-hooks';
+import type { ContextPortfolioData } from '@web3-ai-copilot/data-hooks/types-only';
 
 export const useSendAiMessageMutation = (): UseMutationResult<
   IChatMessage,
   Error,
-  { messages: IChatMessage[]; portfolioData: CombinedPortfolioData | null },
+  { messages: IChatMessage[]; portfolioData: ContextPortfolioData | null },
   unknown
 > => {
   const { addToast } = useToastStore();
@@ -18,7 +18,7 @@ export const useSendAiMessageMutation = (): UseMutationResult<
       portfolioData,
     }: {
       messages: IChatMessage[];
-      portfolioData: CombinedPortfolioData | null;
+      portfolioData: ContextPortfolioData | null;
     }) => {
       const response = await axios.post(
         `${AI_GATEWAY_URL}/api/chat`,

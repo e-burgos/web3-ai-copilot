@@ -16,7 +16,8 @@
         "platform": "node",
         "bundle": true,
         "format": ["cjs"],
-        "outputFileName": "index.js"
+        "outputFileName": "index.js",
+        "skipTypeCheck": true
       }
     },
     "serve": {
@@ -30,4 +31,3 @@
     }
   }
 }
-

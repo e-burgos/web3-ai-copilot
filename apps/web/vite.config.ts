@@ -22,4 +22,14 @@ export default defineConfig({
       transformMixedEsModules: true,
     },
   },
+  optimizeDeps: {
+    include: ['wagmi', '@wagmi/core', 'viem'],
+    exclude: [],
+    esbuildOptions: {
+      target: 'esnext',
+    },
+  },
+  ssr: {
+    noExternal: ['@walletconnect'],
+  },
 });

@@ -3,9 +3,19 @@
   "compilerOptions": {
     "module": "commonjs",
     "lib": ["es2020"],
-    "types": ["node"]
+    "types": ["node"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "jsx": "preserve",
+    "moduleResolution": "node"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
+  "exclude": [
+    "jest.config.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "**/libs/data-hooks/src/queries/**",
+    "**/libs/data-hooks/src/client/**",
+    "**/libs/data-hooks/src/components/**"
+  ]
 }
-

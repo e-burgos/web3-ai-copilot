@@ -1,15 +1,11 @@
-import { PortfolioDashboard } from '../components/PortfolioDashboard';
-import { NftViewer } from '../components/NftViewer';
-import { DefiPositions } from '../components/DefiPositions';
-import { ExportButton } from '../components/ExportButton';
+import { Dashboard } from '../components/dashboard';
+import { ExportButton } from '@web3-ai-copilot/export-services';
 import { PageLayout } from '../components/layout/PageLayout';
 
 function HomePage() {
   return (
     <PageLayout title="Dashboard" rightButton={<ExportButton />}>
-      <PortfolioDashboard />
-      <NftViewer />
-      <DefiPositions />
+      <Dashboard />
     </PageLayout>
   );
 }

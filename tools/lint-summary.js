@@ -12,9 +12,7 @@ const projects = [
   'web',
   'ai-gateway',
   'wallet',
-  'ui-components',
   'data-hooks',
-  'app-state',
   'trading-charts',
   'shared-utils',
   'export-services',
@@ -30,7 +28,9 @@ function runLintForProject(projectName) {
     });
 
     // Check if the project is being ignored
-    if (output.includes('All files matching the following patterns are ignored')) {
+    if (
+      output.includes('All files matching the following patterns are ignored')
+    ) {
       return {
         success: true,
         project: projectName,
@@ -43,7 +43,11 @@ function runLintForProject(projectName) {
     const errorOutput = error.stdout || error.stderr || error.message;
 
     // Check if it's only a warning about ignored files
-    if (errorOutput.includes('All files matching the following patterns are ignored')) {
+    if (
+      errorOutput.includes(
+        'All files matching the following patterns are ignored'
+      )
+    ) {
       return {
         success: true,
         project: projectName,
@@ -95,7 +99,9 @@ function runLintSummary() {
     }
 
     if (projectsIgnored.length > 0) {
-      console.log(`ℹ️  ${projectsIgnored.length} projects ignored (no files for lint):\n`);
+      console.log(
+        `ℹ️  ${projectsIgnored.length} projects ignored (no files for lint):\n`
+      );
       projectsIgnored.forEach(({ project }) => {
         console.log(`   ⊘ ${project}`);
       });
@@ -120,7 +126,9 @@ function runLintSummary() {
   }
 
   if (projectsIgnored.length > 0) {
-    console.log(`\nℹ️  ${projectsIgnored.length} projects ignored (no files for lint):\n`);
+    console.log(
+      `\nℹ️  ${projectsIgnored.length} projects ignored (no files for lint):\n`
+    );
     projectsIgnored.forEach(({ project }) => {
       console.log(`   ⊘ ${project}`);
     });
@@ -128,7 +136,9 @@ function runLintSummary() {
 
   console.log('\n💡 Tip: Run "pnpm lint:debug" to see detailed output');
   console.log('💡 Tip: Run "pnpm lint:fix" to automatically fix errors');
-  console.log(`💡 Tip: Run "nx lint <project>" to see details of a specific project\n`);
+  console.log(
+    `💡 Tip: Run "nx lint <project>" to see details of a specific project\n`
+  );
 
   process.exit(1);
 }

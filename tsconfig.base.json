@@ -15,9 +15,10 @@
     "baseUrl": ".",
     "paths": {
       "@web3-ai-copilot/wallet": ["libs/wallet/src/index.ts"],
-      "@web3-ai-copilot/ui-components": ["libs/ui-components/src/index.ts"],
-      "@web3-ai-copilot/app-state": ["libs/app-state/src/index.ts"],
       "@web3-ai-copilot/data-hooks": ["libs/data-hooks/src/index.ts"],
+      "@web3-ai-copilot/data-hooks/types-only": [
+        "libs/data-hooks/src/types-only.ts"
+      ],
       "@web3-ai-copilot/ai-config": ["libs/ai-config/src/index.ts"],
       "@web3-ai-copilot/rag-services": ["libs/rag-services/src/index.ts"],
       "@web3-ai-copilot/shared-utils": ["libs/shared-utils/src/index.ts"],
@@ -37,4 +38,3 @@
   },
   "exclude": ["node_modules", "tmp"]
 }
-

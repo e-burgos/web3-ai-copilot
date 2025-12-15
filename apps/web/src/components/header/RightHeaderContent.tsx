@@ -1,11 +1,13 @@
-import { ThemeToggle } from './ThemeToggle';
-import { WalletConnect } from './WalletConnect';
+import { WalletConnected } from './WalletConnected';
+import { WalletDisconnected } from './WalletDisconnected';
+import { useWallet } from '@web3-ai-copilot/wallet';
 
 export const RightHeaderContent = () => {
-  return (
-    <div className="flex items-center gap-4">
-      <ThemeToggle />
-      <WalletConnect />
-    </div>
-  );
+  const { address, isConnected } = useWallet();
+
+  if (isConnected && address) {
+    return <WalletConnected />;
+  }
+
+  return <WalletDisconnected />;
 };
