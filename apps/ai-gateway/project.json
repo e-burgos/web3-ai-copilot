@@ -16,7 +16,7 @@
         "platform": "node",
         "bundle": true,
         "format": ["cjs"],
-        "outputFileName": "index.js",
+        "outputFileName": "index.cjs",
         "skipTypeCheck": true
       }
     },
