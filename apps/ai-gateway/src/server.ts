@@ -6,315 +6,69 @@ import { chatRoutes } from './routes/chat';
 import { portfolioAnalysisRoutes } from './routes/portfolio-analysis';
 import { zerionRoutes } from './routes/zerionRoutes';
 import { errorHandler } from './middleware/errorHandler';
+import {
+  zerionRateLimiter,
+  aiRateLimiter,
+  generalRateLimiter,
+} from './middleware/rateLimiter';
+import { requestLogger } from './middleware/requestLogger';
+import { logger } from './utils/logger';
+import { swaggerDefinition } from './swagger/config';
 
 // Swagger configuration
 const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Web3 AI Copilot API',
-      version: '1.0.0',
-      description: 'AI-powered Web3 portfolio analysis and chat API',
-    },
-    servers: [
-      {
-        url: 'http://localhost:3001',
-        description: 'Development server',
-      },
-    ],
-    paths: {
-      '/health': {
-        get: {
-          summary: 'Health check',
-          description: 'Check if the API server is running and healthy',
-          tags: ['Health'],
-          security: [],
-          responses: {
-            200: {
-              description: 'Server is healthy',
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      status: {
-                        type: 'string',
-                        example: 'ok',
-                      },
-                    },
-                    required: ['status'],
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      '/api/chat': {
-        post: {
-          summary: 'Chat with AI assistant',
-          description:
-            'Send messages to an AI assistant for Web3 portfolio analysis and advice',
-          tags: ['Chat'],
-          security: [{ ApiKeyAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    messages: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          role: {
-                            type: 'string',
-                            enum: ['user', 'assistant', 'system'],
-                            example: 'user',
-                          },
-                          content: {
-                            type: 'string',
-                            example: 'Analyze my portfolio performance',
-                          },
-                        },
-                        required: ['role', 'content'],
-                      },
-                    },
-                    provider: {
-                      type: 'string',
-                      enum: ['openai', 'anthropic', 'llama'],
-                      default: 'openai',
-                      description: 'AI provider to use',
-                    },
-                  },
-                  required: ['messages'],
-                },
-                example: {
-                  messages: [
-                    {
-                      role: 'user',
-                      content: 'Analyze my portfolio performance',
-                    },
-                    {
-                      role: 'assistant',
-                      content: "I'd be happy to help analyze your portfolio.",
-                    },
-                  ],
-                  provider: 'openai',
-                },
-              },
-            },
-          },
-          responses: {
-            200: {
-              description: 'Successful chat response',
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      content: {
-                        type: 'string',
-                        example: 'Based on your portfolio analysis...',
-                      },
-                      usage: {
-                        type: 'object',
-                        properties: {
-                          promptTokens: { type: 'number', example: 150 },
-                          completionTokens: { type: 'number', example: 200 },
-                          totalTokens: { type: 'number', example: 350 },
-                        },
-                      },
-                    },
-                    required: ['content'],
-                  },
-                },
-              },
-            },
-            400: {
-              description: 'Bad request - invalid input',
-              content: {
-                'application/json': {
-                  schema: {
-                    $ref: '#/components/schemas/Error',
-                  },
-                },
-              },
-            },
-            500: {
-              description: 'Internal server error',
-              content: {
-                'application/json': {
-                  schema: {
-                    $ref: '#/components/schemas/Error',
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      '/api/portfolio-analysis': {
-        post: {
-          summary: 'Analyze Web3 portfolio',
-          description:
-            'Get AI-powered analysis of a Web3 portfolio including performance, risk assessment, and optimization suggestions',
-          tags: ['Portfolio Analysis'],
-          security: [{ ApiKeyAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    portfolioData: {
-                      type: 'object',
-                      properties: {
-                        totalValue: { type: 'number', example: 12500.5 },
-                        tokens: {
-                          type: 'array',
-                          items: {
-                            type: 'object',
-                            properties: {
-                              symbol: { type: 'string', example: 'ETH' },
-                              name: { type: 'string', example: 'Ethereum' },
-                              value: { type: 'number', example: 8500.25 },
-                              priceChange24h: { type: 'number', example: 2.5 },
-                            },
-                            required: [
-                              'symbol',
-                              'name',
-                              'value',
-                              'priceChange24h',
-                            ],
-                          },
-                        },
-                      },
-                      required: ['totalValue', 'tokens'],
-                    },
-                    provider: {
-                      type: 'string',
-                      enum: ['openai', 'anthropic', 'llama'],
-                      default: 'openai',
-                      description: 'AI provider to use for analysis',
-                    },
-                  },
-                  required: ['portfolioData'],
-                },
-                example: {
-                  portfolioData: {
-                    totalValue: 12500.5,
-                    tokens: [
-                      {
-                        symbol: 'ETH',
-                        name: 'Ethereum',
-                        value: 8500.25,
-                        priceChange24h: 2.5,
-                      },
-                      {
-                        symbol: 'USDC',
-                        name: 'USD Coin',
-                        value: 4000.25,
-                        priceChange24h: 0.1,
-                      },
-                    ],
-                  },
-                  provider: 'openai',
-                },
-              },
-            },
-          },
-          responses: {
-            200: {
-              description: 'Successful portfolio analysis',
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      content: {
-                        type: 'string',
-                        example:
-                          'Your portfolio shows strong diversification with 68% in Ethereum and 32% in stablecoins.',
-                      },
-                      usage: {
-                        type: 'object',
-                        properties: {
-                          promptTokens: { type: 'number', example: 250 },
-                          completionTokens: { type: 'number', example: 180 },
-                          totalTokens: { type: 'number', example: 430 },
-                        },
-                      },
-                    },
-                    required: ['content'],
-                  },
-                },
-              },
-            },
-            400: {
-              description: 'Bad request - invalid portfolio data',
-              content: {
-                'application/json': {
-                  schema: { $ref: '#/components/schemas/Error' },
-                },
-              },
-            },
-            422: {
-              description: 'Validation error - malformed request data',
-              content: {
-                'application/json': {
-                  schema: { $ref: '#/components/schemas/Error' },
-                },
-              },
-            },
-            500: {
-              description: 'Internal server error',
-              content: {
-                'application/json': {
-                  schema: { $ref: '#/components/schemas/Error' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    components: {
-      schemas: {
-        Error: {
-          type: 'object',
-          properties: {
-            error: { type: 'string', example: 'Internal server error' },
-            message: {
-              type: 'string',
-              example: 'An unexpected error occurred',
-            },
-          },
-          required: ['error', 'message'],
-        },
-      },
-      securitySchemes: {
-        ApiKeyAuth: {
-          type: 'apiKey',
-          in: 'header',
-          name: 'Authorization',
-          description: 'Bearer token or Basic auth for API access',
-        },
-      },
-    },
-  },
-  apis: [], // No necesitamos archivos JSDoc ya que definimos los paths manualmente
+  definition: swaggerDefinition,
+  apis: [], // Using structured Swagger definitions from swagger/ folder
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 export const server = express();
 
-server.use(cors());
+// CORS configuration
+const corsOptions = {
+  origin: (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    const allowedOrigins = process.env.ALLOWED_ORIGINS
+      ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+      : [];
+
+    // In development, allow all origins
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+
+    // In production, only allow specified origins
+    if (allowedOrigins.length === 0) {
+      // If no origins specified, allow all (fallback for backwards compatibility)
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+server.use(cors(corsOptions));
 server.use(express.json());
+
+// Request logging middleware (should be early in the chain)
+server.use(requestLogger);
+
+// Apply general rate limiting to all routes
+server.use(generalRateLimiter);
 
 // Swagger UI
 server.use('/', swaggerUi.serve);
@@ -328,9 +82,10 @@ server.get(
   })
 );
 
-server.use('/api/chat', chatRoutes);
-server.use('/api/portfolio-analysis', portfolioAnalysisRoutes);
-server.use('/api/zerion', zerionRoutes);
+// Apply specific rate limiters to routes
+server.use('/api/chat', aiRateLimiter, chatRoutes);
+server.use('/api/portfolio-analysis', aiRateLimiter, portfolioAnalysisRoutes);
+server.use('/api/zerion', zerionRateLimiter, zerionRoutes);
 
 /**
  * @swagger
@@ -355,7 +110,21 @@ server.use('/api/zerion', zerionRoutes);
  *                 - status
  */
 server.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
+  const healthData = {
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development',
+    memory: {
+      used:
+        Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100,
+      total:
+        Math.round((process.memoryUsage().heapTotal / 1024 / 1024) * 100) / 100,
+    },
+  };
+
+  logger.debug('Health check requested', healthData);
+  res.json(healthData);
 });
 
 server.use(errorHandler);

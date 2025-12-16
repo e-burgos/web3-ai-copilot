@@ -105,9 +105,16 @@ web3-ai-copilot/
 #### Validation and Documentation
 
 - **Zod 3.22+** - TypeScript-first schema validation
-- **Swagger/OpenAPI** - Automatic API documentation
-- **swagger-jsdoc** - Documentation generation from comments
+- **Swagger/OpenAPI** - Organized API documentation in `swagger/` folder
+- **swagger-jsdoc** - Documentation generation
 - **swagger-ui-express** - Interactive UI to explore API
+
+#### Security and Performance
+
+- **express-rate-limit** - Rate limiting middleware
+- **node-cache** - In-memory response caching
+- **winston** - Structured logging
+- **cors** - CORS configuration for production
 
 #### RAG (Retrieval Augmented Generation)
 
@@ -186,7 +193,7 @@ React frontend application providing a complete interface for Web3 portfolio man
 
 ### 2. **AI Gateway** (`apps/ai-gateway`)
 
-REST API backend providing AI services for portfolio analysis and contextual chat.
+REST API backend providing AI services for portfolio analysis, contextual chat, and Zerion API proxy.
 
 #### Main Endpoints
 
@@ -225,6 +232,7 @@ REST API backend providing AI services for portfolio analysis and contextual cha
 - Automatic portfolio context in system prompt
 - Support for multiple LLM providers
 - Token usage tracking for cost management
+- Rate limiting: 20 requests/minute per IP
 
 ##### `/api/portfolio-analysis` (POST)
 
@@ -257,26 +265,140 @@ REST API backend providing AI services for portfolio analysis and contextual cha
 - Deep analysis of diversification, risk, performance
 - Personalized recommendations based on real data
 - Specialized prompts for financial analysis
+- Rate limiting: 20 requests/minute per IP
+
+##### `/api/zerion/wallets/{address}/portfolio` (GET)
+
+**Purpose**: Get wallet portfolio overview from Zerion API
+
+**Parameters**:
+
+- `address` (path): Ethereum wallet address
+- `positions` (query, optional): Filter by position type (`no_filter`, `only_simple`, `only_complex`)
+
+**Response**: Portfolio data with total value, distribution, and 24h changes
+
+**Features**:
+
+- Cached responses (30 seconds TTL)
+- Rate limiting: 100 requests/minute per IP
+- Automatic error handling
+
+##### `/api/zerion/wallets/{address}/positions` (GET)
+
+**Purpose**: Get paginated token positions for a wallet
+
+**Parameters**:
+
+- `address` (path): Ethereum wallet address
+- `pageSize` (query, optional): Items per page (default: 100)
+- `filter` (query, optional): Filter by position type
+- `trash` (query, optional): Filter by trash status
+- `cursor` (query, optional): Pagination cursor
+
+**Response**: Paginated positions with metadata
+
+##### `/api/zerion/wallets/{address}/positions/all` (GET)
+
+**Purpose**: Get all token positions without pagination
+
+**Features**:
+
+- Cached responses (30 seconds TTL)
+- Supports filtering and sorting
+
+##### `/api/zerion/wallets/{address}/nfts/all` (GET)
+
+**Purpose**: Get all NFT positions for a wallet
+
+**Parameters**:
+
+- `address` (path): Ethereum wallet address
+- `chainIds` (query, optional): Comma-separated chain IDs
+- `collectionsIds` (query, optional): Comma-separated collection IDs
+
+**Features**:
+
+- Cached responses (60 seconds TTL)
+- Multi-chain NFT support
+
+##### `/api/zerion/wallets/{address}/transactions` (GET)
+
+**Purpose**: Get paginated transaction history
+
+**Parameters**:
+
+- `address` (path): Ethereum wallet address
+- `pageSize` (query, optional): Items per page (default: 10)
+- `search` (query, optional): Search query
+- `cursor` (query, optional): Pagination cursor
+
+**Features**:
+
+- Cached responses (10 seconds TTL)
+- Search functionality
 
 ##### `/health` (GET)
 
-**Purpose**: Server health check
+**Purpose**: Enhanced server health check
 
 **Response**:
 
 ```json
 {
-  "status": "ok"
+  "status": "ok",
+  "timestamp": "2024-01-01T12:00:00.000Z",
+  "uptime": 3600.5,
+  "environment": "production",
+  "memory": {
+    "used": 45.2,
+    "total": 128.0
+  }
 }
 ```
 
+**Features**:
+
+- Server uptime tracking
+- Memory usage monitoring
+- Environment information
+
 #### Technical Features
+
+##### Security & Performance
+
+- **Rate Limiting**:
+  - Zerion endpoints: 100 requests/minute per IP
+  - AI endpoints: 20 requests/minute per IP
+  - General: 200 requests/minute per IP
+- **CORS Protection**: Configurable allowed origins for production
+- **Response Caching**: In-memory caching with TTL per endpoint type
+  - Portfolio: 30 seconds
+  - Positions: 30 seconds
+  - NFTs: 60 seconds
+  - Transactions: 10 seconds
+
+##### Observability
+
+- **Structured Logging**: Winston logger with JSON format in production
+- **Request Logging**: All requests logged with method, path, IP, duration
+- **Error Tracking**: Comprehensive error logging with stack traces
+- **Performance Monitoring**: Response time tracking for all endpoints
+
+##### Code Quality
 
 - **Robust validation** with Zod schemas for type safety
 - **Centralized error handling** with custom middleware
-- **Swagger/OpenAPI** for interactive documentation
-- **CORS configured** for development and production
-- **Modular and extensible** to add new LLM providers
+- **Organized Swagger/OpenAPI** documentation in `swagger/` folder
+- **Modular architecture** with separated routes, controllers, and services
+- **Type-safe** with strict TypeScript throughout
+
+##### API Documentation
+
+- **Swagger UI**: Interactive API documentation at `/api-docs`
+- **Organized Structure**: All endpoints documented in `swagger/paths/`
+- **Reusable Schemas**: Shared schemas in `swagger/schemas.ts`
+- **Complete Coverage**: All endpoints fully documented with examples
 
 ---
 
@@ -331,12 +453,13 @@ React Query hooks and API clients for fetching portfolio data.
 - `usePortfolioData()` - Portfolio overview
 - `useContextPortfolioData()` - **Master hook** that fetches all data
 
-##### Zerion Client
+##### Backend Client
 
-- TypeScript wrapper for Zerion API
+- TypeScript client for backend API endpoints
 - Automatic pagination handling
 - Data transformation to internal types
 - Error handling and retry logic
+- **Note**: Zerion API key is now secured in the backend, not exposed in frontend
 
 ##### Mappers
 
@@ -674,10 +797,12 @@ User → Click "Connect Wallet"
 
 ```
 React Query hooks detect address
-  → useTokenData() calls Zerion API
-  → useNftData() calls Zerion API
-  → useDeFiPositionsData() calls Zerion API
-  → useTransactionData() calls Zerion API
+  → useTokenData() calls backend /api/zerion/wallets/{address}/positions
+  → useNftData() calls backend /api/zerion/wallets/{address}/nfts/all
+  → useDeFiPositionsData() calls backend /api/zerion/wallets/{address}/positions
+  → useTransactionData() calls backend /api/zerion/wallets/{address}/transactions
+  → Backend proxies requests to Zerion API (API key protected)
+  → Backend caches responses (reduces Zerion API calls)
   → Data transformed with mappers
   → Data cached in React Query
   → UI updates automatically
@@ -774,9 +899,13 @@ Each message saved in Zustand
 ### Performance
 
 ✅ **Code Splitting**: Lazy loading of heavy components  
-✅ **Intelligent Caching**: React Query reduces unnecessary requests  
-✅ **Render Optimization**: React.memo and useMemo where needed  
-✅ **Bundle Size**: Vite optimizes and tree-shakes unused code
+✅ **Intelligent Caching**:
+
+- React Query reduces unnecessary frontend requests
+- Backend caching reduces Zerion API calls (30-60s TTL)
+  ✅ **Render Optimization**: React.memo and useMemo where needed  
+  ✅ **Bundle Size**: Vite optimizes and tree-shakes unused code
+  ✅ **Response Caching**: Backend caches Zerion responses to minimize external API usage
 
 ### Developer Experience
 
@@ -797,9 +926,11 @@ Each message saved in Zustand
 ### Security
 
 ✅ **Robust Validation**: Zod schemas in backend  
-✅ **Protected API Keys**: Never exposed in frontend  
+✅ **Protected API Keys**: Zerion API key secured in backend, never exposed in frontend  
+✅ **Rate Limiting**: Protection against API abuse and cost overruns  
+✅ **CORS Protection**: Configurable allowed origins for production  
 ✅ **Type Safety**: Prevents runtime errors  
-✅ **Error Handling**: Centralized error management
+✅ **Error Handling**: Centralized error management with structured logging
 
 ### Extensibility
 
@@ -869,12 +1000,24 @@ LLAMA_API_KEY=your_key
 # Default provider
 DEFAULT_AI_PROVIDER=openai
 
+# CORS (optional, for production)
+# Comma-separated list of allowed origins
+# Example: ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+ALLOWED_ORIGINS=
+
+# Logging (optional)
+# Options: error, warn, info, debug
+LOG_LEVEL=info
+
 # Vector Store (optional, for RAG - future implementation)
 SUPABASE_URL=...
 SUPABASE_KEY=...
 # or
 PINECONE_API_KEY=...
 PINECONE_ENVIRONMENT=...
+
+# Render deployment (optional, auto-detected)
+RENDER_EXTERNAL_URL=https://your-app.onrender.com
 ```
 
 ### Run in Development
@@ -926,10 +1069,23 @@ pnpm format:check     # Check format without changing files
 
 Once the backend is running, access:
 
-- **Swagger UI**: http://localhost:3001/api-docs
+- **Swagger UI**: http://localhost:3001/api-docs (or `/` root path)
+- **Production**: https://web3-ai-copilot-gateway.onrender.com/api-docs
+
+**Features**:
+
 - Interactive documentation of all endpoints
 - Request and response examples
 - Test endpoints directly from the browser
+- Organized by tags: Health, Chat, Portfolio Analysis, Zerion
+- Complete schema definitions with validation rules
+
+**Documentation Structure**:
+
+- All Swagger definitions organized in `apps/ai-gateway/src/swagger/`
+- Paths separated by module: `swagger/paths/`
+- Reusable schemas: `swagger/schemas.ts`
+- Centralized configuration: `swagger/config.ts`
 
 ### Type Structure
 
@@ -952,12 +1108,25 @@ import type { AIProvider, ChatResponse } from '@web3-ai-copilot/ai-config';
 
 ## 🔮 Roadmap and Future Improvements
 
+### Recently Completed ✅
+
+- [x] **Zerion API migration to backend** - API key secured, no CORS issues
+- [x] **Rate limiting** - Protection against API abuse (100 req/min for Zerion, 20 req/min for AI)
+- [x] **Response caching** - Reduced Zerion API calls with intelligent caching (30-60s TTL)
+- [x] **Structured logging** - Winston logger for better observability and debugging
+- [x] **Enhanced health check** - Detailed server status, uptime, and memory metrics
+- [x] **Organized Swagger documentation** - All endpoints documented in modular `swagger/` folder structure
+- [x] **CORS for production** - Configurable allowed origins for enhanced security
+- [x] **Backend deployment** - Successfully deployed to Render with proper configuration
+
 ### Short Term
 
 - [ ] **Complete RAG implementation** - Full vector store integration with Supabase, Pinecone, Qdrant
 - [ ] **Embeddings service** - OpenAI and alternative embedding providers
 - [ ] **Document indexing pipeline** - Automated ingestion and chunking
 - [ ] **Enhanced chart components** - Candlestick charts, volume indicators
+- [ ] **Cache invalidation strategies** - Smart cache clearing on data updates
+- [ ] **Request metrics dashboard** - Visual monitoring of API usage and performance
 
 ### Medium Term
 

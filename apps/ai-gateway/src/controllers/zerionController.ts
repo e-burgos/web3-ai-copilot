@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { zerionService } from '../services/zerionService';
+import { cacheService } from '../services/cacheService';
+import { logger } from '../utils/logger';
 
 export const zerionController = {
   async getPortfolio(req: Request, res: Response) {
@@ -20,7 +22,19 @@ export const zerionController = {
           'no_filter',
       };
 
+      // Check cache first
+      const cacheKey = 'portfolio';
+      const cached = cacheService.get(cacheKey, address, options);
+      if (cached) {
+        logger.debug('Returning cached portfolio data', { address });
+        return res.json(cached);
+      }
+
+      // Fetch from Zerion
       const response = await zerionService.getPortfolio(address, options);
+
+      // Cache the response
+      cacheService.set(cacheKey, address, response, options);
 
       return res.json(response);
     } catch (error) {
@@ -56,7 +70,18 @@ export const zerionController = {
         sort: (sort as 'value' | 'name' | 'chain') || 'value',
       };
 
+      // Check cache
+      const cacheKey = 'allPositions';
+      const cached = cacheService.get(cacheKey, address, options);
+      if (cached) {
+        logger.debug('Returning cached all positions data', { address });
+        return res.json(cached);
+      }
+
       const result = await zerionService.getAllPositions(address, options);
+
+      // Cache the response
+      cacheService.set(cacheKey, address, result, options);
 
       return res.json(result);
     } catch (error) {
@@ -136,7 +161,18 @@ export const zerionController = {
         sort: sort as string | undefined,
       };
 
+      // Check cache
+      const cacheKey = 'allNFTPositions';
+      const cached = cacheService.get(cacheKey, address, options);
+      if (cached) {
+        logger.debug('Returning cached NFT positions data', { address });
+        return res.json(cached);
+      }
+
       const result = await zerionService.getAllNFTPositions(address, options);
+
+      // Cache the response
+      cacheService.set(cacheKey, address, result, options);
 
       return res.json(result);
     } catch (error) {

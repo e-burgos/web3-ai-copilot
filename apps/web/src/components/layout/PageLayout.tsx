@@ -24,7 +24,7 @@ export function PageLayout({ title, rightButton, children }: PageLayoutProps) {
     );
 
   return (
-    <div className="min-h-dvh md:min-h-[calc(100vh-80px)] px-8 pt-8 pb-[15dvh] md:pb-12">
+    <div className="min-h-dvh md:min-h-[calc(100vh-80px)] px-8 pt-8 pb-[25dvh] md:pb-12">
       <section className="container mx-auto space-y-6">
         <div className="flex items-center flex-col md:flex-row justify-between gap-4">
           <Typography tag="h2" className="text-3xl font-bold">

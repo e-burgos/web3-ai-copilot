@@ -5,6 +5,7 @@ import type {
   NFTPosition,
   Transaction,
 } from 'zerion-sdk-ts';
+import { logger } from '../utils/logger';
 
 if (!process.env.ZERION_API_KEY) {
   throw new Error(
@@ -58,12 +59,25 @@ class ZerionService {
     address: string,
     options: GetPortfolioOptions = {}
   ): Promise<ApiResponse<unknown>> {
+    const startTime = Date.now();
     try {
+      logger.debug('Calling Zerion API: getPortfolio', { address, options });
       const response = await zerion.wallets.getPortfolio(address, {
         positions: options.positions || 'no_filter',
       });
+      const duration = Date.now() - startTime;
+      logger.info('Zerion API call successful: getPortfolio', {
+        address,
+        duration: `${duration}ms`,
+      });
       return response;
     } catch (error) {
+      const duration = Date.now() - startTime;
+      logger.error('Zerion API call failed: getPortfolio', {
+        address,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        duration: `${duration}ms`,
+      });
       throw new Error(
         `Failed to fetch portfolio for address ${address}: ${error instanceof Error ? error.message : 'Unknown error'}`
       );

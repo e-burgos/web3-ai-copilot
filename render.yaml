@@ -18,3 +18,5 @@ services:
         sync: false
       - key: DEFAULT_AI_PROVIDER
         value: openai
+      - key: ALLOWED_ORIGINS
+        sync: false
