@@ -32,11 +32,11 @@ export function NftViewer() {
 
   return (
     <CardContainer className="flex flex-col w-full space-y-2 p-4 rounded-lg shadow-lg">
-      <div className="flex flex-col sm:flex-row gap-2 justify-between items-center pb-4">
-        <Typography tag="h3" className="text-xl font-semibold">
+      <div className="flex flex-col sm:flex-row gap-2 justify-between items-center pb-4 w-full">
+        <Typography tag="h3" className="text-xl font-semibold w-full">
           NFTs Gallery
         </Typography>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full justify-end">
           <NftSortFilter sort={sort} setSort={setSort} />
           <Button
             variant="solid"

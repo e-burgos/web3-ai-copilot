@@ -114,7 +114,7 @@ export function NftTable() {
           rowActions={rowActions}
           headerOptions={{
             headerContainer: (
-              <div className="flex justify-between items-center gap-4 sm:flex-row flex-col w-full sm:h-20 h-30 p-4">
+              <div className="flex justify-between items-center gap-2 sm:flex-row flex-col w-full sm:h-20 h-30 p-4">
                 <TableSearcher
                   placeholder="Search NFT"
                   search={search}
@@ -123,7 +123,7 @@ export function NftTable() {
                     setSearch('');
                   }}
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full justify-end">
                   <NftSortFilter sort={sort} setSort={setSort} />
                   <Button
                     variant="solid"

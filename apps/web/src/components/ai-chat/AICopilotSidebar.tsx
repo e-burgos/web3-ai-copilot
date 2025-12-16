@@ -12,9 +12,11 @@ import {
   Input,
   LucideIcons,
   Loader,
+  useTheme,
 } from '@e-burgos/tucu-ui';
 
 export function AICopilotSidebar() {
+  const { mode } = useTheme();
   const { mutateAsync: sendAiMessage, isPending: isLoading } =
     useSendAiMessageMutation();
   const {
@@ -105,7 +107,7 @@ export function AICopilotSidebar() {
           </Button>
         </div>
       )}
-      <div className="flex-1  space-y-4 mb-12">
+      <div className="flex-1 space-y-4 mb-12">
         {messages.length === 0 && (
           <div className="text-center text-muted-foreground py-8">
             <Typography tag="h3">
@@ -124,7 +126,7 @@ export function AICopilotSidebar() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-light-dark">
+      <div className="absolute z-10 bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-light-dark">
         <div className="flex items-center gap-2">
           <Input
             type="text"
@@ -132,7 +134,8 @@ export function AICopilotSidebar() {
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask a question..."
-            className="w-full"
+            inputClassName={`${mode === 'dark' ? 'text-gray-200!' : 'text-gray-800!'}`}
+            className={`w-full ${mode === 'dark' ? 'text-gray-200!' : 'text-gray-800!'}`}
           />
           <Button
             shape="circle"

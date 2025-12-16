@@ -99,7 +99,7 @@ export function TokenTable() {
         }}
         headerOptions={{
           headerContainer: (
-            <div className="flex justify-between items-center gap-4 sm:flex-row flex-col w-full sm:h-20 h-30 p-4">
+            <div className="flex justify-between items-center gap-2 w-full sm:h-20 h-30 p-4">
               <TableSearcher
                 placeholder="Search Token"
                 search={search}

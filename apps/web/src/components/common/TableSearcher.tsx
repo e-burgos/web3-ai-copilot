@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Button, Input, LucideIcons } from '@e-burgos/tucu-ui';
+import { Button, Input, LucideIcons, useTheme } from '@e-burgos/tucu-ui';
 
 interface TableSearcherProps {
   placeholder: string;
@@ -20,6 +20,7 @@ const TableSearcher: React.FC<TableSearcherProps> = ({
   onClear,
   showClearButton = true,
 }) => {
+  const { mode } = useTheme();
   const onHandleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(e.target.value);
@@ -36,6 +37,7 @@ const TableSearcher: React.FC<TableSearcherProps> = ({
         type="text"
         icon={icon || <LucideIcons.Search className="h-4 w-4" />}
         onChange={onHandleChange}
+        inputClassName={`${mode === 'dark' ? 'text-gray-200!' : 'text-gray-800!'}`}
       />
       {showClearButton && (
         <Button
