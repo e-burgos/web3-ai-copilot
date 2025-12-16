@@ -25,9 +25,10 @@ export function NftSortFilter({ sort, setSort }: NftSortFilterProps) {
       options={SORT_OPTIONS}
       value={validSort}
       className="w-full md:w-40! min-w-40!"
-      onChange={(value: InputSelectOption) =>
-        setSort(value.value as NFTSortType)
-      }
+      onChange={(value: InputSelectOption) => {
+        if (!value.value) return;
+        setSort(value.value as NFTSortType);
+      }}
       placeholder="Sort by"
     />
   );

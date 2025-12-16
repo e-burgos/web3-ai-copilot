@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useAccount, useChainId } from 'wagmi';
 import { NftDataResponse, NFTSortType } from '../types/nfts';
-import zerion from '../client/zerionClient';
+import { backendClient } from '../client/backendClient';
 import { nftsMapper } from '../mappers/nftsMapper';
 
 export function useAllNftsData({
@@ -33,12 +33,11 @@ export function useAllNftsData({
         throw new Error('No address provided');
       }
 
-      const result = await zerion.wallets.getAllNFTPositions(targetAddress, {
+      const result = await backendClient.getAllNFTPositions(targetAddress, {
         filter: {
           chain_ids: chainIds || [],
           collections_ids: collectionsIds || [],
         },
-        // @ts-expect-error - sort may not be in getAllNFTPositions type definition
         sort: sort,
       });
 

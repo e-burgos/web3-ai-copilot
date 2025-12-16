@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: ai-gateway
+    runtime: node
+    plan: free
+    buildCommand: pnpm install && pnpm build:gateway
+    startCommand: node dist/apps/ai-gateway/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ZERION_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: DEFAULT_AI_PROVIDER
+        value: openai

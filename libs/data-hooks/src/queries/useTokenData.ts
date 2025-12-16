@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useAccount, useChainId } from 'wagmi';
 import { TokenDataResponse } from '../types/tokens';
 import { tokensMapper } from '../mappers/tokensMapper';
-import zerion from '../client/zerionClient';
+import { backendClient } from '../client/backendClient';
 import {
   defaultPaginationStrategy,
   cursorCache,
@@ -46,7 +46,7 @@ export function useTokenData({
 
       const result = await defaultPaginationStrategy.fetchPage(
         async (cursor?: string) => {
-          const pageData = await zerion.wallets.getPositions(targetAddress, {
+          const pageData = await backendClient.getPositions(targetAddress, {
             filter: {
               positions: filter,
               trash: trash,
@@ -99,7 +99,7 @@ export function useAllTokenData({
         throw new Error('No address provided');
       }
 
-      const result = await zerion.wallets.getAllPositions(targetAddress, {
+      const result = await backendClient.getAllPositions(targetAddress, {
         filter: {
           positions: filter,
           trash: trash,

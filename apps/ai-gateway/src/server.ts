@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { chatRoutes } from './routes/chat';
 import { portfolioAnalysisRoutes } from './routes/portfolio-analysis';
+import { zerionRoutes } from './routes/zerionRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 // Swagger configuration
@@ -52,7 +53,8 @@ const swaggerOptions = {
       '/api/chat': {
         post: {
           summary: 'Chat with AI assistant',
-          description: 'Send messages to an AI assistant for Web3 portfolio analysis and advice',
+          description:
+            'Send messages to an AI assistant for Web3 portfolio analysis and advice',
           tags: ['Chat'],
           security: [{ ApiKeyAuth: [] }],
           requestBody: {
@@ -91,8 +93,14 @@ const swaggerOptions = {
                 },
                 example: {
                   messages: [
-                    { role: 'user', content: 'Analyze my portfolio performance' },
-                    { role: 'assistant', content: "I'd be happy to help analyze your portfolio." },
+                    {
+                      role: 'user',
+                      content: 'Analyze my portfolio performance',
+                    },
+                    {
+                      role: 'assistant',
+                      content: "I'd be happy to help analyze your portfolio.",
+                    },
                   ],
                   provider: 'openai',
                 },
@@ -176,7 +184,12 @@ const swaggerOptions = {
                               value: { type: 'number', example: 8500.25 },
                               priceChange24h: { type: 'number', example: 2.5 },
                             },
-                            required: ['symbol', 'name', 'value', 'priceChange24h'],
+                            required: [
+                              'symbol',
+                              'name',
+                              'value',
+                              'priceChange24h',
+                            ],
                           },
                         },
                       },
@@ -195,8 +208,18 @@ const swaggerOptions = {
                   portfolioData: {
                     totalValue: 12500.5,
                     tokens: [
-                      { symbol: 'ETH', name: 'Ethereum', value: 8500.25, priceChange24h: 2.5 },
-                      { symbol: 'USDC', name: 'USD Coin', value: 4000.25, priceChange24h: 0.1 },
+                      {
+                        symbol: 'ETH',
+                        name: 'Ethereum',
+                        value: 8500.25,
+                        priceChange24h: 2.5,
+                      },
+                      {
+                        symbol: 'USDC',
+                        name: 'USD Coin',
+                        value: 4000.25,
+                        priceChange24h: 0.1,
+                      },
                     ],
                   },
                   provider: 'openai',
@@ -265,7 +288,10 @@ const swaggerOptions = {
           type: 'object',
           properties: {
             error: { type: 'string', example: 'Internal server error' },
-            message: { type: 'string', example: 'An unexpected error occurred' },
+            message: {
+              type: 'string',
+              example: 'An unexpected error occurred',
+            },
           },
           required: ['error', 'message'],
         },
@@ -304,6 +330,7 @@ server.get(
 
 server.use('/api/chat', chatRoutes);
 server.use('/api/portfolio-analysis', portfolioAnalysisRoutes);
+server.use('/api/zerion', zerionRoutes);
 
 /**
  * @swagger

@@ -838,9 +838,6 @@ pnpm install
 Create `apps/web/.env.local`:
 
 ```env
-# Zerion API (required)
-VITE_ZERION_API_KEY=your_api_key_here
-
 # WalletConnect (optional)
 VITE_WALLET_CONNECT_PROJECT_ID=your_project_id
 
@@ -855,6 +852,9 @@ Create `apps/ai-gateway/.env`:
 ```env
 # Server port (default: 3001)
 PORT=3001
+
+# Zerion API (required)
+ZERION_API_KEY=your_zerion_api_key_here
 
 # OpenAI (optional)
 OPENAI_API_KEY=sk-...

@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import { useAccount, useChainId } from 'wagmi';
 import { Portfolio, PortfolioDataResponse } from '../types';
-import zerion from '../client/zerionClient';
+import { backendClient } from '../client/backendClient';
 import { ApiResponse } from 'zerion-sdk-ts';
 
 export function usePortfolioData({
@@ -21,10 +21,12 @@ export function usePortfolioData({
       if (!targetAddress) {
         throw new Error('No address provided');
       }
-      const response: ApiResponse<Portfolio> =
-        await zerion.wallets.getPortfolio(targetAddress, {
+      const response: ApiResponse<Portfolio> = await backendClient.getPortfolio(
+        targetAddress,
+        {
           positions: 'no_filter',
-        });
+        }
+      );
       return {
         data: response?.data?.attributes || {},
       } as PortfolioDataResponse;

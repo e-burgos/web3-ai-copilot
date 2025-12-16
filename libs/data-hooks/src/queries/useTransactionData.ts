@@ -4,7 +4,7 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 import { useAccount, useChainId } from 'wagmi';
-import zerion from '../client/zerionClient';
+import { backendClient } from '../client/backendClient';
 import { transactionsMapper } from '../mappers/transactionsMapper';
 import { TransactionDataResponse } from '../types/transactions';
 import {
@@ -48,7 +48,7 @@ export function useTransactionData({
 
       const result = await defaultPaginationStrategy.fetchPage(
         async (cursor?: string) => {
-          const pageData = await zerion.wallets.getTransactions(targetAddress, {
+          const pageData = await backendClient.getTransactions(targetAddress, {
             filter: {
               search_query: search,
             },

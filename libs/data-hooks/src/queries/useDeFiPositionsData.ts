@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import { useAccount, useChainId } from 'wagmi';
 import { DefiPositionResponse } from '../types/deFi';
-import zerion from '../client/zerionClient';
+import { backendClient } from '../client/backendClient';
 import {
   cursorCache,
   defaultPaginationStrategy,
@@ -48,7 +48,7 @@ export function useDeFiPositionsData({
 
       const result = await defaultPaginationStrategy.fetchPage(
         async (cursor?: string) => {
-          const pageData = await zerion.wallets.getPositions(targetAddress, {
+          const pageData = await backendClient.getPositions(targetAddress, {
             filter: {
               trash: trash,
               positions: filter,
@@ -127,7 +127,7 @@ export const useDeFiPositionsDataMutation = (): UseMutationResult<
 
       const result = await defaultPaginationStrategy.fetchPage(
         async (cursor?: string) => {
-          const pageData = await zerion.wallets.getPositions(address, {
+          const pageData = await backendClient.getPositions(address, {
             filter: {
               trash: trash,
               positions: filter,

@@ -12,7 +12,7 @@ import {
 import { PortfolioDataResponse } from '../types/portfolio';
 import { TokenDataResponse } from '../types/tokens';
 import { TransactionDataResponse } from '../types/transactions';
-import zerion from '../client/zerionClient';
+import { backendClient } from '../client/backendClient';
 import { ApiResponse } from 'zerion-sdk-ts';
 import { Portfolio } from '../types/portfolio';
 import { tokensMapper } from '../mappers/tokensMapper';
@@ -51,7 +51,7 @@ export function useContextPortfolioData(): UseQueryResult<
           queryKey: ['portfolio-data', address],
           queryFn: async (): Promise<PortfolioDataResponse> => {
             const response: ApiResponse<Portfolio> =
-              await zerion.wallets.getPortfolio(address, {
+              await backendClient.getPortfolio(address, {
                 positions: 'no_filter',
               });
             return {
@@ -65,7 +65,7 @@ export function useContextPortfolioData(): UseQueryResult<
         queryClient.fetchQuery<TokenDataResponse>({
           queryKey: ['allTokenData', address],
           queryFn: async (): Promise<TokenDataResponse> => {
-            const result = await zerion.wallets.getAllPositions(address, {
+            const result = await backendClient.getAllPositions(address, {
               filter: {
                 positions: 'no_filter',
                 trash: 'only_non_trash',
@@ -88,7 +88,7 @@ export function useContextPortfolioData(): UseQueryResult<
 
             const result = await defaultPaginationStrategy.fetchPage(
               async (cursor?: string) => {
-                const pageData = await zerion.wallets.getTransactions(address, {
+                const pageData = await backendClient.getTransactions(address, {
                   filter: {
                     search_query: '',
                   },
@@ -121,7 +121,7 @@ export function useContextPortfolioData(): UseQueryResult<
         queryClient.fetchQuery<NftDataResponse>({
           queryKey: ['allNftsData', address],
           queryFn: async (): Promise<NftDataResponse> => {
-            const result = await zerion.wallets.getAllNFTPositions(address, {
+            const result = await backendClient.getAllNFTPositions(address, {
               filter: {
                 chain_ids: [],
                 collections_ids: [],
@@ -143,7 +143,7 @@ export function useContextPortfolioData(): UseQueryResult<
 
             const result = await defaultPaginationStrategy.fetchPage(
               async (cursor?: string) => {
-                const pageData = await zerion.wallets.getPositions(address, {
+                const pageData = await backendClient.getPositions(address, {
                   filter: {
                     trash: 'only_non_trash',
                     positions: 'only_complex',
