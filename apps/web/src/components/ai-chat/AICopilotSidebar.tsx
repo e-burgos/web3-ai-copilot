@@ -32,6 +32,7 @@ export function AICopilotSidebar() {
   const { data: portfolioData } = useContextPortfolioData();
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Get messages from store for current wallet
   const messages = getMessages(address);
@@ -81,6 +82,13 @@ export function AICopilotSidebar() {
     }
   };
 
+  const handleInputContainerTouch = (e: React.TouchEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT' && inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <Drawer
       title="AI Copilot"
@@ -126,9 +134,17 @@ export function AICopilotSidebar() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="absolute z-10 bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-light-dark">
-        <div className="flex items-center gap-2">
+      <div
+        className="absolute z-10 bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-light-dark"
+        style={{ touchAction: 'manipulation' }}
+      >
+        <div
+          className="flex items-center gap-2"
+          onTouchStart={handleInputContainerTouch}
+          style={{ WebkitTapHighlightColor: 'transparent' }}
+        >
           <Input
+            ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -136,6 +152,10 @@ export function AICopilotSidebar() {
             placeholder="Ask a question..."
             inputClassName={`${mode === 'dark' ? 'text-gray-200!' : 'text-gray-800!'}`}
             className={`w-full ${mode === 'dark' ? 'text-gray-200!' : 'text-gray-800!'}`}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="none"
+            spellCheck="false"
           />
           <Button
             shape="circle"

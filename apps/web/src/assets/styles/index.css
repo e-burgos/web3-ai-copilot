@@ -1,1 +1,25 @@
 @import 'tailwindcss';
+
+/* Mobile input focus fix */
+input,
+textarea,
+select {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Ensure input fields are touchable on mobile */
+input:not([type='checkbox']):not([type='radio']),
+textarea {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent iOS zoom on input focus */
+@media screen and (max-width: 768px) {
+  input:not([type='checkbox']):not([type='radio']),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
