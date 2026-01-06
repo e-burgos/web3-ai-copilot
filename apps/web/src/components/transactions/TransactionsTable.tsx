@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTransactionData } from '@web3-ai-copilot/data-hooks';
 import {
+  Alert,
   Button,
   CardContainer,
   LucideIcons,
@@ -66,6 +67,10 @@ export function TransactionsTable() {
   if (isLoading) {
     return (
       <div className="space-y-2">
+        <Alert variant="info">
+          This is a demo version. The server may be in hibernation to reduce
+          costs, so please be patient until it is back online.
+        </Alert>
         {[1, 2, 3, 4, 5].map((i) => (
           <Skeleton key={i} variant="rectangular" className="h-16" />
         ))}

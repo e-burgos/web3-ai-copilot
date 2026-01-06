@@ -162,6 +162,7 @@ export function AICopilotSidebar() {
             variant="transparent"
             size="medium"
             onClick={handleSend}
+            onTouchStart={handleSend}
             disabled={isLoading}
             className="w-12 h-12"
           >

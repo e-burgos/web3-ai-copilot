@@ -1,5 +1,6 @@
 import { useAllNftsData, NFTSortType } from '@web3-ai-copilot/data-hooks';
 import {
+  Alert,
   Button,
   CardContainer,
   LucideIcons,
@@ -50,10 +51,16 @@ export function NftViewer() {
       </div>
 
       {isLoading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} variant="rectangular" className="h-64" />
-          ))}
+        <div className="space-y-4">
+          <Alert variant="info">
+            This is a demo version. The server may be in hibernation to reduce
+            costs, so please be patient until it is back online.
+          </Alert>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <Skeleton key={i} variant="rectangular" className="h-64" />
+            ))}
+          </div>
         </div>
       )}
 

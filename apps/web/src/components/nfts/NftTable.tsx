@@ -5,6 +5,7 @@ import {
   NFTSortType,
 } from '@web3-ai-copilot/data-hooks';
 import {
+  Alert,
   Button,
   CardContainer,
   LucideIcons,
@@ -70,6 +71,10 @@ export function NftTable() {
   if (isLoading) {
     return (
       <div className="space-y-2">
+        <Alert variant="info">
+          This is a demo version. The server may be in hibernation to reduce
+          costs, so please be patient until it is back online.
+        </Alert>
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} variant="rectangular" className="h-16" />
         ))}

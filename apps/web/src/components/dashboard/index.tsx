@@ -1,5 +1,10 @@
 import { usePortfolioData, useTokenData } from '@web3-ai-copilot/data-hooks';
-import { CardContainer, LucideIcons, Typography } from '@e-burgos/tucu-ui';
+import {
+  CardContainer,
+  LucideIcons,
+  Typography,
+  Alert,
+} from '@e-burgos/tucu-ui';
 import { PortfolioOverview } from './PortfolioOverview';
 import { AssetAllocationChart } from './AssetAllocationChart';
 import { TopAssetsChart } from './TopAssetsChart';
@@ -43,6 +48,10 @@ export function Dashboard() {
   if (isLoading) {
     return (
       <div className="space-y-6">
+        <Alert variant="info">
+          This is a demo version. The server may be in hibernation to reduce
+          costs, so please be patient until it is back online.
+        </Alert>
         <Skeleton variant="rectangular" className="h-24 rounded-lg" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Skeleton variant="rectangular" className="h-64 rounded-lg" />
