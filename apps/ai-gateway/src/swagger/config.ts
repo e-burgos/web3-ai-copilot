@@ -3,6 +3,7 @@ import { healthPaths } from './paths/health';
 import { chatPaths } from './paths/chat';
 import { portfolioAnalysisPaths } from './paths/portfolio-analysis';
 import { zerionPaths } from './paths/zerion';
+import { providersPaths } from './paths/providers';
 import { schemas } from './schemas';
 
 const baseUrl = process.env.API_BASE_URL || 'http://localhost:3001';
@@ -38,6 +39,7 @@ export const swaggerDefinition: SwaggerDefinition = {
     ...chatPaths,
     ...portfolioAnalysisPaths,
     ...zerionPaths,
+    ...providersPaths,
   },
   components: {
     schemas,
@@ -66,6 +68,10 @@ export const swaggerDefinition: SwaggerDefinition = {
     {
       name: 'Zerion',
       description: 'Zerion API proxy endpoints for wallet data',
+    },
+    {
+      name: 'Providers',
+      description: 'AI provider information endpoints',
     },
   ],
 };

@@ -304,7 +304,11 @@ export const chatRoutes = Router();
  *                 type: string
  *                 enum: [openai, anthropic, llama, groq]
  *                 default: openai
- *                 description: AI provider to use
+ *                 description: AI provider to use. If not specified, defaults to Groq if GROQ_API_KEY is available, otherwise OpenAI.
+ *               model:
+ *                 type: string
+ *                 description: Specific model to use for the selected provider. If not specified, uses the default model for the provider.
+ *                 example: "gpt-4o-mini"
  *             required:
  *               - messages
  *     responses:

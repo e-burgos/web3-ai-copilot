@@ -37,6 +37,7 @@ export const chatPaths = {
                 ],
               },
               provider: 'openai',
+              model: 'gpt-4o-mini',
             },
           },
         },

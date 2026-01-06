@@ -75,6 +75,7 @@ export const schemas = {
         items: {
           $ref: '#/components/schemas/ChatMessage',
         },
+        description: 'Array of chat messages',
       },
       portfolioData: {
         type: 'object',
@@ -84,7 +85,12 @@ export const schemas = {
         type: 'string',
         enum: ['openai', 'anthropic', 'llama', 'groq'],
         default: 'openai',
-        description: 'AI provider to use',
+        description: 'AI provider to use. If not specified, defaults to Groq if GROQ_API_KEY is available, otherwise OpenAI.',
+      },
+      model: {
+        type: 'string',
+        description: 'Specific model to use for the selected provider. If not specified, uses the default model for the provider.',
+        example: 'gpt-4o-mini',
       },
     },
     required: ['messages'],
@@ -247,5 +253,43 @@ export const schemas = {
         type: 'object',
       },
     },
+  },
+  ProvidersResponse: {
+    type: 'object',
+    properties: {
+      providers: {
+        type: 'array',
+        items: {
+          $ref: '#/components/schemas/Provider',
+        },
+        description: 'List of AI providers with their availability and models',
+      },
+    },
+    required: ['providers'],
+  },
+  Provider: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        enum: ['groq', 'openai', 'anthropic', 'llama'],
+        example: 'groq',
+        description: 'Provider name',
+      },
+      available: {
+        type: 'boolean',
+        example: true,
+        description: 'Whether the provider is available (has valid API key configured)',
+      },
+      models: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        example: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'],
+        description: 'List of available models for this provider',
+      },
+    },
+    required: ['name', 'available', 'models'],
   },
 };
