@@ -22,5 +22,5 @@
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["defi", "Sparkline", "tucu", "tucutable", "Wagmi"]
+  "cSpell.words": ["defi", "Groq", "Sparkline", "tucu", "tucutable", "Wagmi"]
 }

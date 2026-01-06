@@ -144,7 +144,7 @@ const portfolioAnalysisSchema = z.object({
       })
     ),
   }),
-  provider: z.enum(['openai', 'anthropic', 'llama']).optional(),
+  provider: z.enum(['openai', 'anthropic', 'llama', 'groq']).optional(),
 });
 
 export const portfolioAnalysisRoutes = Router();
@@ -169,7 +169,7 @@ export const portfolioAnalysisRoutes = Router();
  *                 $ref: '#/components/schemas/PortfolioData'
  *               provider:
  *                 type: string
- *                 enum: [openai, anthropic, llama]
+ *                 enum: [openai, anthropic, llama, groq]
  *                 default: openai
  *                 description: AI provider to use for analysis
  *             required:

@@ -16,6 +16,12 @@ services:
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_BASE_URL
+        sync: false
+      - key: GROQ_MODEL
+        sync: false
       - key: DEFAULT_AI_PROVIDER
         value: openai
       - key: ALLOWED_ORIGINS

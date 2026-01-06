@@ -82,7 +82,7 @@ export const schemas = {
       },
       provider: {
         type: 'string',
-        enum: ['openai', 'anthropic', 'llama'],
+        enum: ['openai', 'anthropic', 'llama', 'groq'],
         default: 'openai',
         description: 'AI provider to use',
       },
@@ -156,7 +156,7 @@ export const schemas = {
       },
       provider: {
         type: 'string',
-        enum: ['openai', 'anthropic', 'llama'],
+        enum: ['openai', 'anthropic', 'llama', 'groq'],
         default: 'openai',
         description: 'AI provider to use for analysis',
       },

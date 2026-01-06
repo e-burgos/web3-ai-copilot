@@ -8,7 +8,12 @@ import type { ContextPortfolioData } from '@web3-ai-copilot/data-hooks/types-onl
 export const useSendAiMessageMutation = (): UseMutationResult<
   IChatMessage,
   Error,
-  { messages: IChatMessage[]; portfolioData: ContextPortfolioData | null },
+  {
+    messages: IChatMessage[];
+    portfolioData: ContextPortfolioData | null;
+    model?: string;
+    provider?: string;
+  },
   unknown
 > => {
   const { addToast } = useToastStore();
@@ -16,15 +21,21 @@ export const useSendAiMessageMutation = (): UseMutationResult<
     mutationFn: async ({
       messages,
       portfolioData,
+      model,
+      provider,
     }: {
       messages: IChatMessage[];
       portfolioData: ContextPortfolioData | null;
+      model?: string;
+      provider?: string;
     }) => {
       const response = await axios.post(
         `${AI_GATEWAY_URL}/api/chat`,
         {
           messages,
           portfolioData,
+          ...(model && { model }),
+          ...(provider && { provider }),
         },
         {
           headers: {

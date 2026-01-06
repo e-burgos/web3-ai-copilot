@@ -12,7 +12,7 @@ export interface AIResponse {
   };
 }
 
-export type AIProvider = 'openai' | 'anthropic' | 'llama';
+export type AIProvider = 'openai' | 'anthropic' | 'llama' | 'groq';
 
 export interface AIConfig {
   provider: AIProvider;

@@ -158,7 +158,8 @@ const chatSchema = z.object({
         .optional(),
     })
     .optional(),
-  provider: z.enum(['openai', 'anthropic', 'llama']).optional(),
+  provider: z.enum(['openai', 'anthropic', 'llama', 'groq']).optional(),
+  model: z.string().optional(),
 });
 
 export const chatRoutes = Router();
@@ -301,7 +302,7 @@ export const chatRoutes = Router();
  *                                 type: number
  *               provider:
  *                 type: string
- *                 enum: [openai, anthropic, llama]
+ *                 enum: [openai, anthropic, llama, groq]
  *                 default: openai
  *                 description: AI provider to use
  *             required:
@@ -371,7 +372,8 @@ chatRoutes.post('/', async (req, res, next) => {
     const response = await aiController.chat(
       validatedData.messages,
       validatedData.provider,
-      portfolioData
+      portfolioData,
+      validatedData.model
     );
     res.json(response);
   } catch (error) {

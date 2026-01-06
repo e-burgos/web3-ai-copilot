@@ -97,9 +97,11 @@ web3-ai-copilot/
 
 #### AI and LLMs
 
-- **OpenAI SDK** - Integration with GPT-4, GPT-3.5
+- **OpenAI SDK** - Integration with GPT-4o, GPT-4o-mini, GPT-3.5-turbo (most economical models)
 - **Anthropic SDK** - Integration with Claude
+- **Groq** - OpenAI-compatible provider with fast inference (llama-3.3-70b-versatile, llama-3.1-8b-instant, and more)
 - **Llama** - Support for local/self-hosted models
+- **Dynamic provider/model selection** - Runtime selection based on available API keys
 - **Prompt system** - Configurable templates for portfolio analysis
 
 #### Validation and Documentation
@@ -170,10 +172,13 @@ React frontend application providing a complete interface for Web3 portfolio man
 
 ##### AI Copilot
 
-- **Chat sidebar** with integrated AI assistant
+- **Chat sidebar** with integrated AI assistant and fullscreen mode
 - **Contextual analysis** of portfolio in real-time
 - **Persistent history** per wallet using Zustand + localStorage
-- **Multiple AI providers** (OpenAI, Anthropic, Llama)
+- **Multiple AI providers** (OpenAI, Anthropic, Llama, Groq)
+- **Dynamic model selection** - Choose from available models per provider
+- **Markdown rendering** - Rich text, images (including base64), code blocks, tables
+- **Copy to clipboard** - Easy message copying with visual feedback
 - **Intelligent recommendations** based on portfolio data
 
 ##### Export
@@ -230,7 +235,8 @@ REST API backend providing AI services for portfolio analysis, contextual chat, 
 
 - Zod validation of all inputs
 - Automatic portfolio context in system prompt
-- Support for multiple LLM providers
+- Support for multiple LLM providers (OpenAI, Anthropic, Groq, Llama)
+- Dynamic model selection per provider
 - Token usage tracking for cost management
 - Rate limiting: 20 requests/minute per IP
 
@@ -337,6 +343,36 @@ REST API backend providing AI services for portfolio analysis, contextual chat, 
 
 - Cached responses (10 seconds TTL)
 - Search functionality
+
+##### `/api/providers` (GET)
+
+**Purpose**: Get available AI providers and their models
+
+**Response**:
+
+```json
+{
+  "providers": [
+    {
+      "name": "groq",
+      "available": true,
+      "models": ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", ...]
+    },
+    {
+      "name": "openai",
+      "available": true,
+      "models": ["gpt-4o-mini", "gpt-3.5-turbo", ...]
+    }
+  ]
+}
+```
+
+**Features**:
+
+- Returns only providers with configured API keys
+- Lists all available models per provider
+- Used by frontend for dynamic provider/model selection
+- Rate limiting: 200 requests/minute per IP
 
 ##### `/health` (GET)
 
@@ -989,15 +1025,29 @@ ZERION_API_KEY=your_zerion_api_key_here
 
 # OpenAI (optional)
 OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini  # Optional, defaults to gpt-4o-mini
+# Available models (most economical):
+# gpt-4o-mini, gpt-4o-mini-2024-07-18 (most economical GPT-4o model)
+# gpt-3.5-turbo, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106 (most economical overall)
 
 # Anthropic (optional)
 ANTHROPIC_API_KEY=sk-ant-...
+
+# Groq (optional, OpenAI-compatible, faster inference)
+GROQ_API_KEY=your_groq_api_key
+GROQ_BASE_URL=https://api.groq.com/openai/v1  # Optional, defaults to Groq API
+GROQ_MODEL=llama-3.3-70b-versatile  # Optional, defaults to llama-3.3-70b-versatile
+# Other available models:
+# Production: llama-3.1-8b-instant, openai/gpt-oss-120b, openai/gpt-oss-20b
+# Production Systems (with tools): groq/compound, groq/compound-mini
+# Preview: meta-llama/llama-4-maverick-17b-128e-instruct, meta-llama/llama-4-scout-17b-16e-instruct,
+#          moonshotai/kimi-k2-instruct-0905, openai/gpt-oss-safeguard-20b, qwen/qwen3-32b
 
 # Llama (optional, for local models)
 LLAMA_API_URL=http://localhost:8080
 LLAMA_API_KEY=your_key
 
-# Default provider
+# Default provider (auto-detects Groq if GROQ_API_KEY is available, otherwise uses this)
 DEFAULT_AI_PROVIDER=openai
 
 # CORS (optional, for production)
@@ -1118,6 +1168,13 @@ import type { AIProvider, ChatResponse } from '@web3-ai-copilot/ai-config';
 - [x] **Organized Swagger documentation** - All endpoints documented in modular `swagger/` folder structure
 - [x] **CORS for production** - Configurable allowed origins for enhanced security
 - [x] **Backend deployment** - Successfully deployed to Render with proper configuration
+- [x] **Groq AI provider integration** - OpenAI-compatible provider with fast inference
+- [x] **Dynamic model selection** - Runtime provider/model selection based on available API keys
+- [x] **Markdown rendering in chat** - Rich text, images (base64), code blocks, tables, lists
+- [x] **Copy to clipboard** - Easy message copying with visual feedback
+- [x] **Fullscreen chat mode** - Expand chat drawer to full screen for better readability
+- [x] **Text overflow handling** - Proper word-wrapping for long texts and addresses
+- [x] **Table overflow handling** - Horizontal scroll for wide tables in chat messages
 
 ### Short Term
 

@@ -8,14 +8,23 @@ interface ChatMessage {
   content: string;
 }
 
+function getDefaultProvider(): AIProvider {
+  // If GROQ_API_KEY is available, prefer Groq (OpenAI-compatible, faster)
+  if (process.env.GROQ_API_KEY) {
+    return 'groq';
+  }
+  // Otherwise use the configured default or fallback to openai
+  return (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
+}
+
 export const aiController = {
   async chat(
     messages: ChatMessage[],
     provider?: AIProvider,
-    portfolioData?: ContextPortfolioData
+    portfolioData?: ContextPortfolioData,
+    model?: string
   ) {
-    const defaultProvider =
-      (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
+    const defaultProvider = getDefaultProvider();
     const selectedProvider = provider || defaultProvider;
 
     let systemPrompt = 'You are a helpful Web3 AI assistant.';
@@ -87,7 +96,11 @@ Use this portfolio context to provide relevant, personalized responses about the
       ...messages,
     ];
 
-    const response = await llmService.chat(enhancedMessages, selectedProvider);
+    const response = await llmService.chat(
+      enhancedMessages,
+      selectedProvider,
+      model
+    );
     return response;
   },
 
@@ -95,8 +108,7 @@ Use this portfolio context to provide relevant, personalized responses about the
     portfolioData: ContextPortfolioData,
     provider?: AIProvider
   ) {
-    const defaultProvider =
-      (process.env.DEFAULT_AI_PROVIDER as AIProvider) || 'openai';
+    const defaultProvider = getDefaultProvider();
     const selectedProvider = provider || defaultProvider;
 
     const prompt = getPortfolioAnalysisPrompt(portfolioData);

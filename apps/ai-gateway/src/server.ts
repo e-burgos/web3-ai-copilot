@@ -5,6 +5,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import { chatRoutes } from './routes/chat';
 import { portfolioAnalysisRoutes } from './routes/portfolio-analysis';
 import { zerionRoutes } from './routes/zerionRoutes';
+import { providersRoutes } from './routes/providers';
 import { errorHandler } from './middleware/errorHandler';
 import {
   zerionRateLimiter,
@@ -86,6 +87,7 @@ server.get(
 server.use('/api/chat', aiRateLimiter, chatRoutes);
 server.use('/api/portfolio-analysis', aiRateLimiter, portfolioAnalysisRoutes);
 server.use('/api/zerion', zerionRateLimiter, zerionRoutes);
+server.use('/api/providers', providersRoutes);
 
 /**
  * @swagger

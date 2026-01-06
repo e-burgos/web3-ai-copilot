@@ -5,7 +5,7 @@ export function getAIConfig(provider: AIProvider): AIConfig {
     openai: () => ({
       provider: 'openai',
       apiKey: process.env.OPENAI_API_KEY || '',
-      model: 'gpt-4-turbo-preview',
+      model: process.env.OPENAI_MODEL || 'gpt-4o-mini', // Updated default to gpt-4o-mini
       temperature: 0.7,
       maxTokens: 2000,
     }),
@@ -23,8 +23,14 @@ export function getAIConfig(provider: AIProvider): AIConfig {
       temperature: 0.7,
       maxTokens: 2000,
     }),
+    groq: () => ({
+      provider: 'groq',
+      apiKey: process.env.GROQ_API_KEY || '',
+      model: 'llama-3.3-70b-versatile',
+      temperature: 0.7,
+      maxTokens: 2000,
+    }),
   };
 
   return configs[provider]();
 }
-

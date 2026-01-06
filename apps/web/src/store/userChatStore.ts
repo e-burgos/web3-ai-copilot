@@ -18,6 +18,10 @@ interface UserChatStore {
   chatHistories: ChatHistories;
   // Current wallet address for chat context
   currentWalletAddress: string | null;
+  // AI Model and Provider state
+  model: string;
+  provider: 'groq' | 'openai' | 'anthropic' | 'llama';
+  modelModalOpen: boolean;
   setChatOpen: (open: boolean) => void;
   setSelectedToken: (token: string | null) => void;
   // Chat history methods
@@ -29,6 +33,10 @@ interface UserChatStore {
   ) => void;
   clearHistory: (walletAddress?: string | null) => void;
   setCurrentWalletAddress: (address: string | null) => void;
+  // AI Model and Provider methods
+  setModel: (model: string) => void;
+  setProvider: (provider: 'groq' | 'openai' | 'anthropic' | 'llama') => void;
+  setModelModalOpen: (open: boolean) => void;
 }
 
 const getWalletKey = (walletAddress?: string | null): string => {
@@ -42,6 +50,9 @@ export const userChatStore = create<UserChatStore>()(
       selectedToken: null,
       chatHistories: {},
       currentWalletAddress: null,
+      model: 'gpt-4-turbo-preview',
+      provider: 'openai',
+      modelModalOpen: false,
 
       setChatOpen: (open: boolean) => set({ chatOpen: open }),
 
@@ -106,14 +117,21 @@ export const userChatStore = create<UserChatStore>()(
           return { chatHistories: newHistories };
         });
       },
+
+      setModel: (model: string) => set({ model }),
+      setProvider: (provider: 'groq' | 'openai' | 'anthropic' | 'llama') =>
+        set({ provider }),
+      setModelModalOpen: (open: boolean) => set({ modelModalOpen: open }),
     }),
     {
       name: 'web3-ai-copilot-chat-storage',
       storage: createJSONStorage(() => localStorage),
-      // Only persist chat histories and current wallet address
+      // Only persist chat histories, current wallet address, model and provider
       partialize: (state) => ({
         chatHistories: state.chatHistories,
         currentWalletAddress: state.currentWalletAddress,
+        model: state.model,
+        provider: state.provider,
       }),
     }
   )
