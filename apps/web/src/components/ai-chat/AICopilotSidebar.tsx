@@ -119,7 +119,7 @@ export function AICopilotSidebar() {
         position="right"
         className={`relative transition-all duration-300 ${
           isFullscreen
-            ? 'w-screen! h-screen! max-w-screen! fixed! inset-0! z-[9999]!'
+            ? 'w-screen! h-screen! max-w-screen!'
             : 'w-full lg:w-[450px]!'
         }`}
       >
@@ -143,7 +143,7 @@ export function AICopilotSidebar() {
               variant="ghost"
               shape="circle"
               size="mini"
-              className="ml-1 text-xs"
+              className="ml-1 text-xs hidden! md:block!"
               onClick={handleToggleFullscreen}
             >
               {isFullscreen ? (
@@ -212,7 +212,8 @@ export function AICopilotSidebar() {
             {provider && (
               <Badge
                 className="cursor-pointer w-full rounded-md text-xs flex items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap"
-                size="sm"
+                size='small'
+                color='primary'
                 onClick={() => setModelModalOpen(true)}
                 onTouchStart={() => setModelModalOpen(true)}
               >

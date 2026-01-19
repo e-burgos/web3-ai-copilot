@@ -16,7 +16,7 @@ export function PageLayout({ title, rightButton, children }: PageLayoutProps) {
   if (!isConnected)
     return (
       <div className="flex items-center flex-col justify-center min-h-[calc(100vh-80px)] px-8 pt-8 pb-12">
-        <AppLogo className="w-64 h-64 mb-4" />
+        <AppLogo className="w-48 h-48 mb-4" />
         <Typography tag="h3" className=" font-bold text-center">
           Please connect your wallet to access this page
         </Typography>

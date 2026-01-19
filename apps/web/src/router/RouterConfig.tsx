@@ -5,37 +5,50 @@ import {
   NFTsPageComponent,
   DefiPositionsPageComponent,
 } from './EntryPoints';
-import { AppRoutesMenuItem, LucideIcons } from '@e-burgos/tucu-ui';
+import { StandaloneAppRoutesMenuItem, LucideIcons } from '@e-burgos/tucu-ui';
 
-export const useRouterConfig = (): AppRoutesMenuItem[] => [
+export const ROUTES = {
+  DASHBOARD: '/',
+  TOKENS: '/tokens',
+  NFTS: '/nfts',
+  DEFI: '/defi',
+  TRANSACTIONS: '/transactions',
+}
+
+export const useRouterConfig = (): StandaloneAppRoutesMenuItem[] => {
+  const menuItems = [ 
   {
     name: 'Dashboard',
-    href: '/',
-    icon: <LucideIcons.PieChart />,
+    path: ROUTES.DASHBOARD,
+      icon: <LucideIcons.PieChart />,
     component: <HomePageComponent />,
   },
   {
     name: 'Tokens',
-    href: '/tokens',
+    path: ROUTES.TOKENS,
     icon: <LucideIcons.Coins />,
     component: <TokensPageComponent />,
   },
   {
     name: 'NFTs',
-    href: '/nfts',
+    path: ROUTES.NFTS,
     icon: <LucideIcons.Image />,
     component: <NFTsPageComponent />,
   },
   {
     name: 'DeFi Positions',
-    href: '/defi',
+    path: ROUTES.DEFI,
     icon: <LucideIcons.TrendingUp />,
     component: <DefiPositionsPageComponent />,
   },
   {
     name: 'Transactions',
-    href: '/transactions',
+    path: ROUTES.TRANSACTIONS,
     icon: <LucideIcons.SendToBack />,
     component: <TransactionsPageComponent />,
-  },
-];
+    },
+  ];
+
+  return menuItems;
+
+};

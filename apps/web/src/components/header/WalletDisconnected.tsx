@@ -46,7 +46,7 @@ export function WalletDisconnected() {
           size="small"
           onClick={() => setIsOpen(!isOpen)}
           disabled={isPending}
-          className="!px-4"
+          className="px-4!"
         >
           <div className="flex items-center gap-2">
             {isPending ? (
@@ -71,7 +71,7 @@ export function WalletDisconnected() {
         {isOpen && !isPending && (
           <div className="absolute right-0 mt-2 w-72 rounded-lg shadow-lg bg-white dark:bg-light-dark border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-slide-down">
             {/* Header */}
-            <div className="p-4 bg-muted border-b border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-secondary border-b border-gray-200 dark:border-gray-700">
               <Typography
                 tag="h4"
                 className="text-sm font-semibold text-foreground"
@@ -94,7 +94,7 @@ export function WalletDisconnected() {
                   onClick={() => handleConnect(connector.id)}
                   className="w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-muted transition-all duration-200 group"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-500 to-sky-700 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-sky-500 to-sky-700 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                     {connector.name === 'MetaMask' ? (
                       <WalletMetamask />
                     ) : (
@@ -121,9 +121,9 @@ export function WalletDisconnected() {
             </div>
 
             {/* Footer */}
-            <div className="p-4 bg-muted border-t border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-secondary border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-start gap-2">
-                <LucideIcons.Info className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <LucideIcons.Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <div>
                   <Typography tag="p" className="text-xs text-muted-foreground">
                     New to Web3?{' '}

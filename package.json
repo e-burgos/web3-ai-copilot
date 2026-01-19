@@ -20,7 +20,7 @@
   "packageManager": "pnpm@9.0.0",
   "private": true,
   "dependencies": {
-    "@e-burgos/tucu-ui": "^1.1.0",
+    "@e-burgos/tucu-ui": "^2.0.1",
     "@e-burgos/tucutable": "^1.0.0",
     "@tanstack/react-query": "^5.17.0",
     "@tanstack/react-query-devtools": "^5.91.1",

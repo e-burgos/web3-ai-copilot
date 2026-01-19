@@ -1,10 +1,10 @@
-import { useTheme, InputSwitch, LucideIcons } from '@e-burgos/tucu-ui';
+import { useTheme, Switch, LucideIcons } from '@e-burgos/tucu-ui';
 
 export function ThemeToggle() {
   const { setMode, mode } = useTheme();
 
   return (
-    <InputSwitch
+    <Switch
       offLabel={(<LucideIcons.Sun className="w-4 h-4" />) as unknown as string}
       onLabel={(<LucideIcons.Moon className="w-4 h-4" />) as unknown as string}
       checked={mode === 'dark'}

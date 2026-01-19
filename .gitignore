@@ -6,6 +6,7 @@ dist/
 tmp/
 .nx/cache
 .nx/workspace-data/
+temp/
 
 # Environment variables
 .env

@@ -69,7 +69,7 @@ export function DefiPositionsTable() {
           costs, so please be patient until it is back online.
         </Alert>
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} variant="rectangular" className="h-16" />
+          <Skeleton key={i} variant="rectangular" className="h-16 bg-secondary" />
         ))}
       </div>
     );

@@ -10,14 +10,14 @@ export const useNftTableActions = () => {
     () => [
       {
         action: 'view',
-        label: (_row) => 'Details',
+        label: () => 'Details',
         onClick: (row) => {
           setOpenNftInfoModal(true);
           setNft(row.original);
         },
       },
     ],
-    []
+    [setOpenNftInfoModal, setNft]
   );
 
   return { rowActions };

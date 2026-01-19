@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Modal, InputSelect, InputSelectOption } from '@e-burgos/tucu-ui';
+import { useState, useEffect, useMemo } from 'react';
+import { Modal, Select, SelectOption } from '@e-burgos/tucu-ui';
 import { userChatStore } from '../../store/userChatStore';
 import { useProviders } from '../../queries/useProviders';
 
@@ -18,7 +18,10 @@ export function ModelSelectorModal() {
     'groq' | 'openai' | 'anthropic' | 'llama' | null
   >(provider);
 
-  const providers = providersData?.providers || [];
+  const providers = useMemo(
+    () => providersData?.providers || [],
+    [providersData?.providers]
+  );
 
   // Sync selectedProvider with current provider when modal opens
   // Only set if the provider is available
@@ -46,7 +49,7 @@ export function ModelSelectorModal() {
     (p) => p.name === selectedProvider
   );
 
-  const handleProviderChange = (value: InputSelectOption) => {
+  const handleProviderChange = (value: SelectOption) => {
     const providerName = value.value as
       | 'groq'
       | 'openai'
@@ -76,7 +79,7 @@ export function ModelSelectorModal() {
     }
   };
 
-  const handleModelChange = (value: InputSelectOption) => {
+  const handleModelChange = (value: SelectOption) => {
     // Prevent model selection if provider is not available
     if (!currentProviderData?.available) {
       return;
@@ -91,7 +94,7 @@ export function ModelSelectorModal() {
     setChatOpen(true);
   };
 
-  const providerOptions: (InputSelectOption & { disabled?: boolean })[] = [
+  const providerOptions: (SelectOption & { disabled?: boolean })[] = [
     { name: 'Groq', value: 'groq' },
     { name: 'OpenAI', value: 'openai' },
     { name: 'Anthropic', value: 'anthropic' },
@@ -106,7 +109,7 @@ export function ModelSelectorModal() {
     };
   });
 
-  const modelOptions: InputSelectOption[] =
+  const modelOptions: SelectOption[] =
     currentProviderData?.models.map((m) => ({ name: m, value: m })) || [];
 
   return (
@@ -128,7 +131,7 @@ export function ModelSelectorModal() {
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Provider
           </label>
-          <InputSelect
+          <Select
             options={providerOptions}
             value={
               selectedProvider &&
@@ -156,7 +159,7 @@ export function ModelSelectorModal() {
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Model
           </label>
-          <InputSelect
+          <Select
             options={modelOptions}
             value={model}
             onChange={handleModelChange}

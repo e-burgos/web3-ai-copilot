@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@e-burgos/tucu-ui':
-        specifier: ^1.1.0
-        version: 1.1.0(@types/react@18.3.27)(immer@11.0.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(redux@5.0.1)(tailwindcss@4.1.18)(use-sync-external-store@1.4.0(react@18.3.1))
+        specifier: ^2.0.1
+        version: 2.0.1(@types/react@18.3.27)(immer@11.0.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(redux@5.0.1)(tailwindcss@4.1.18)(use-sync-external-store@1.4.0(react@18.3.1))
       '@e-burgos/tucutable':
         specifier: ^1.0.0
         version: 1.0.0(@types/react@18.3.27)(immer@11.0.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@4.1.18)(use-sync-external-store@1.4.0(react@18.3.1))
@@ -939,8 +939,8 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
 
-  '@e-burgos/tucu-ui@1.1.0':
-    resolution: {integrity: sha512-U9nVLwMNNHhIL5Vix3KrAFHXltqUwo/k7cNh5XAV9aEncRpSA/KiA9+3QzrMhsLRT8tsYZ+Mtoqz6Vyl6jdkRQ==}
+  '@e-burgos/tucu-ui@2.0.1':
+    resolution: {integrity: sha512-0/EveAZdKZu9p/ypEVXQaXrWiO2Ow1GkvV7zux0wlCufwt4MMJWt+fGMWoXtXxR90QroiKRhy8AAcvPTrDN+lg==}
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
@@ -1204,8 +1204,8 @@ packages:
     peerDependencies:
       viem: '>=2.0.0'
 
-  '@headlessui/react@2.2.4':
-    resolution: {integrity: sha512-lz+OGcAH1dK93rgSMzXmm1qKOJkBUqZf1L4M8TWLNplftQD3IkoEDdUFNfAn4ylsN6WOTVtWaLmvmaHOUk1dTA==}
+  '@headlessui/react@2.2.9':
+    resolution: {integrity: sha512-Mb+Un58gwBn0/yWZfyrCh0TJyurtT+dETj7YHleylHk5od3dv2XqETPGWMyQ5/7sYN7oWdyM1u9MvC0OC8UmzQ==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
@@ -3452,10 +3452,6 @@ packages:
     resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
     engines: {node: '>=8.0.0'}
 
-  attr-accept@2.2.5:
-    resolution: {integrity: sha512-0bDNnY/u6pPwHDMoF0FieU354oBi0a8rD9FcsLwzcGWbc8KS8KPIi7y+s13OlVY+gMWc/9xEMUgNE6Qm8ZllYQ==}
-    engines: {node: '>=4'}
-
   autoprefixer@10.4.23:
     resolution: {integrity: sha512-YYTXSFulfwytnjAPlw8QHncHJmlvFKtczb8InXaAx9Q0LbfDnfEYDE55omerIJKihhmU61Ft+cAOSzQVaBUmeA==}
     engines: {node: ^10 || ^12 || >=14}
@@ -4679,10 +4675,6 @@ packages:
     engines: {node: '>= 10.13.0'}
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
-
-  file-selector@2.1.2:
-    resolution: {integrity: sha512-QgXo+mXTe8ljeqUFaX3QVHc5osSItJ/Km+xpocx0aSqWGMSCf6qYs/VnzZgS864Pjn5iceMRFigeAV7AfTlaig==}
-    engines: {node: '>= 12'}
 
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
@@ -6685,9 +6677,6 @@ packages:
     resolution: {integrity: sha512-VWQJyU2bcDTgZw8kpfBpB/ejZASlCrzwz5f2hjb/zlujOEB4oeiAhHygAWq8ubsX2GVkD4kCU5V2dwOTaCY5EQ==}
     engines: {node: '>=0.12'}
 
-  prop-types@15.8.1:
-    resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
-
   property-information@7.1.0:
     resolution: {integrity: sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ==}
 
@@ -6755,20 +6744,11 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-dropzone@14.3.8:
-    resolution: {integrity: sha512-sBgODnq+lcA4P296DY4wacOZz3JFpD99fp+hb//iBO2HHnyeZU3FwWyXJ6salNpqQdsZrgMrotuko/BdJMV8Ug==}
-    engines: {node: '>= 10.13'}
-    peerDependencies:
-      react: '>= 16.8 || 18.0.0'
-
   react-hook-form@7.60.0:
     resolution: {integrity: sha512-SBrYOvMbDB7cV8ZfNpaiLcgjH/a1c7aK0lK+aNigpf4xWLO8q+o4tcvVurv3c4EOyzn/3dCsYt4GKD42VvJ/+A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
-
-  react-is@16.13.1:
-    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
@@ -9175,16 +9155,15 @@ snapshots:
       react: 18.3.1
       tslib: 2.8.1
 
-  '@e-burgos/tucu-ui@1.1.0(@types/react@18.3.27)(immer@11.0.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(redux@5.0.1)(tailwindcss@4.1.18)(use-sync-external-store@1.4.0(react@18.3.1))':
+  '@e-burgos/tucu-ui@2.0.1(@types/react@18.3.27)(immer@11.0.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(redux@5.0.1)(tailwindcss@4.1.18)(use-sync-external-store@1.4.0(react@18.3.1))':
     dependencies:
-      '@headlessui/react': 2.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@headlessui/react': 2.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tailwindcss/typography': 0.0.0-insiders.0339c42(tailwindcss@4.1.18)
       classnames: 2.5.1
       framer-motion: 12.23.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       lucide-react: 0.460.0(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-dropzone: 14.3.8(react@18.3.1)
       react-hook-form: 7.60.0(react@18.3.1)
       react-router: 7.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom: 7.9.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -9414,7 +9393,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@headlessui/react@2.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@headlessui/react@2.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@floating-ui/react': 0.26.28(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-aria/focus': 3.21.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -13110,8 +13089,6 @@ snapshots:
 
   atomic-sleep@1.0.0: {}
 
-  attr-accept@2.2.5: {}
-
   autoprefixer@10.4.23(postcss@8.5.6):
     dependencies:
       browserslist: 4.28.1
@@ -14488,10 +14465,6 @@ snapshots:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
       webpack: 5.104.0(esbuild@0.25.12)
-
-  file-selector@2.1.2:
-    dependencies:
-      tslib: 2.8.1
 
   filelist@1.0.4:
     dependencies:
@@ -16987,12 +16960,6 @@ snapshots:
 
   promise.series@0.2.0: {}
 
-  prop-types@15.8.1:
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react-is: 16.13.1
-
   property-information@7.1.0: {}
 
   proxy-addr@2.0.7:
@@ -17063,18 +17030,9 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-dropzone@14.3.8(react@18.3.1):
-    dependencies:
-      attr-accept: 2.2.5
-      file-selector: 2.1.2
-      prop-types: 15.8.1
-      react: 18.3.1
-
   react-hook-form@7.60.0(react@18.3.1):
     dependencies:
       react: 18.3.1
-
-  react-is@16.13.1: {}
 
   react-is@18.3.1: {}
 

@@ -1,4 +1,4 @@
-import { InputSwitch, LucideIcons } from '@e-burgos/tucu-ui';
+import { Switch, LucideIcons } from '@e-burgos/tucu-ui';
 import { PageLayout } from '../components/layout/PageLayout';
 import { NftViewer } from '../components/nfts/NftViewer';
 import { NftTable } from '../components/nfts/NftTable';
@@ -17,7 +17,7 @@ function NFTsPage() {
     <PageLayout
       title="NFTs"
       rightButton={
-        <InputSwitch
+        <Switch
           label={switchView === 'gallery' ? 'Gallery View' : 'Table View'}
           offLabel={
             (<LucideIcons.Table className="w-4 h-4" />) as unknown as string

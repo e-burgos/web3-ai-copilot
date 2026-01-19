@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { NFTSortType } from '@web3-ai-copilot/data-hooks';
-import { InputSelect, InputSelectOption } from '@e-burgos/tucu-ui';
+import { Select, SelectOption } from '@e-burgos/tucu-ui';
 
 const SORT_OPTIONS = [
   { name: 'Lowest Price', value: 'floor_price' },
@@ -21,11 +21,11 @@ export function NftSortFilter({ sort, setSort }: NftSortFilterProps) {
   }, [sort]);
 
   return (
-    <InputSelect
+    <Select
       options={SORT_OPTIONS}
       value={validSort}
       className="w-full md:w-40! min-w-40!"
-      onChange={(value: InputSelectOption) => {
+      onChange={(value: SelectOption) => {
         if (!value.value) return;
         setSort(value.value as NFTSortType);
       }}

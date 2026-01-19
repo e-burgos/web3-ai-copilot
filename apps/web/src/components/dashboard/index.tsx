@@ -52,12 +52,12 @@ export function Dashboard() {
           This is a demo version. The server may be in hibernation to reduce
           costs, so please be patient until it is back online.
         </Alert>
-        <Skeleton variant="rectangular" className="h-24 rounded-lg" />
+        <Skeleton variant="rectangular" className="h-24 rounded-lg bg-secondary" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Skeleton variant="rectangular" className="h-64 rounded-lg" />
-          <Skeleton variant="rectangular" className="h-64 rounded-lg" />
+          <Skeleton variant="rectangular" className="h-64 rounded-lg bg-secondary" />
+          <Skeleton variant="rectangular" className="h-64 rounded-lg bg-secondary" />
         </div>
-        <Skeleton variant="rectangular" className="h-64 rounded-lg" />
+        <Skeleton variant="rectangular" className="h-64 rounded-lg bg-secondary" />
       </div>
     );
   }
